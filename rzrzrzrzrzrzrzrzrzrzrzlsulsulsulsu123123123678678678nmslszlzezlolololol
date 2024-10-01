@@ -1,0 +1,15 @@
+if game.PlaceId == 2820580801 then
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/rzrznbnb/rznb666/refs/heads/main/rzohiohiohionbnbnbnbnbnbnbnb66666666666666666666666666"))()
+elseif game.PlaceId == gameid2 then
+    -- 服务器2的脚本
+elseif game.PlaceId == gameid3 then
+    -- 服务器3的脚本
+elseif game.PlaceId == gameid4 then
+    -- 服务器4的脚本
+elseif game.PlaceId == gameid5 then
+    -- 服务器5的脚本
+elseif game.PlaceId == gameid6 then
+    -- 服务器6的脚本
+else
+   loadstring(game:HttpGet("https://raw.githubusercontent.com/rzrznbnb/rznb666/refs/heads/main/rz.txt"))() -- 通用脚本
+end
