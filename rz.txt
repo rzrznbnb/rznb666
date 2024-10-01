@@ -8,6 +8,6 @@ local function checkWhitelist(player)
     if not table.find(whitelist, player.Name) then
         game.Players.LocalPlayer:Kick("玩家 " .. player.Name .. " 你不在白名单")
     else
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/rzrznbnb/rznb666/refs/heads/main/rz.txt"))()
+loadstring(game:HttpGet("https://github.com/rzrznbnb/rznb666/raw/refs/heads/main/rzrzrzrzrzrzrzrzrzrzrzlsulsulsulsu123123123678678678nmslszlzezlolololol"))()
     end
 end
