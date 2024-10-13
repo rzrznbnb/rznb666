@@ -1,1278 +1,1510 @@
-local CoreGui = game:GetService("StarterGui")CoreGui:SetCore("SendNotification", {    Title = "rz",    Text = "rz",    Duration = 5, })print("反挂机开启")                local vu = game:GetService("VirtualUser")                game:GetService("Players").LocalPlayer.Idled:connect(function()                   vu:Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)                   wait(1)                   vu:Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)                end)
-local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
-local Window = OrionLib:MakeWindow({Name = "rz", HidePremium = false, SaveConfig = false, IntroText = "欢迎使用", ConfigFolder = "欢迎使用"})
-
-local Tab = Window:MakeTab({
-    Name = "脚本公告",
-    Icon = "rbxassetid://7734068321",
-    PremiumOnly = false
-})
-
-Tab:AddLabel("ohio")
-
-local Tab = Window:MakeTab({
-        Name = "玩家类",
-        Icon = "rbxassetid://7734068321",
-        PremiumOnly = false
-})
-
-Tab:AddTextbox({
-    Name = '速度',
-    Default = '',
-    TextDisappear = true,
-    Callback = function(Value)
-        tpwalking = true
-        local chr = speaker.Character
-        local hum = chr and chr:FindFirstChildWhichIsA('Humanoid')
-        while tpwalking and chr and hum and hum.Parent do
-            local delta = hb:Wait()
-            if hum.MoveDirection.Magnitude > 0 then
-                if Value[1] and isNumber(Value[1]) then
-                    chr:TranslateBy(hum.MoveDirection * tonumber(Value[1]) * delta * 10)
-                else
-                    chr:TranslateBy(hum.MoveDirection * delta * 10)
-                end
-            end
-        end
-    end   
-})
-
-Tab:AddTextbox({
-    Name = '范围',
-    Default = '',
-    TextDisappear = true,
-    Callback = function(Value)
-        _G.HeadSize = Value
-        _G.Disabled = true
-        game:GetService('RunService').RenderStepped:connect(function()
-        if _G.Disabled then
-            for i,v in next, game:GetService('Players'):GetPlayers() do
-                if v.Name ~= game:GetService('Players').LocalPlayer.Name then
-                pcall(function()
-                    v.Character.HumanoidRootPart.Size = Vector3.new(_G.HeadSize,_G.HeadSize,_G.HeadSize)
-                    v.Character.HumanoidRootPart.Transparency = 0.7
-                    v.Character.HumanoidRootPart.CanCollide = false
-                    end)
-                    end
-                end
-            end
-        end)
-    end   
-})
-
-Tab:AddButton({
-  Name = "透视玩家",
-  Callback = function()
-
-local Workspace = game:GetService("Workspace")
+--如果你觉得原ui小可以用这个
 local CoreGui = game:GetService("CoreGui")
-local Players = game:GetService("Players")
-local Noclip = Instance.new("ScreenGui")
-local BG = Instance.new("Frame")
-local Title = Instance.new("TextLabel")
-local Toggle = Instance.new("TextButton")
-local StatusPF = Instance.new("TextLabel")
-local Status = Instance.new("TextLabel")
-local Credit = Instance.new("TextLabel")
-local Plr = Players.LocalPlayer
-local Clipon = false
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
 
-Noclip.Name = "Noclip"
-Noclip.Parent = game.CoreGui
+local ranstart = os.clock()
 
-BG.Name = "BG"
-BG.Parent = Noclip
-BG.BackgroundColor3 = Color3.new(0.0980392, 0.0980392, 0.0980392)
-BG.BorderColor3 = Color3.new(0.0588235, 0.0588235, 0.0588235)
-BG.BorderSizePixel = 2
-BG.Position = UDim2.new(0.149479166, 0, 0.82087779, 0)
-BG.Size = UDim2.new(0, 210, 0, 127)
-BG.Active = true
-BG.Draggable = true
+local Lib = {}
+Lib.connections = {}
 
-Title.Name = "Title"
-Title.Parent = BG
-Title.BackgroundColor3 = Color3.new(0.266667, 0.00392157, 0.627451)
-Title.BorderColor3 = Color3.new(0.180392, 0, 0.431373)
-Title.BorderSizePixel = 2
-Title.Size = UDim2.new(0, 210, 0, 33)
-Title.Font = Enum.Font.Highway
-Title.Text = "Noclip"
-Title.TextColor3 = Color3.new(1, 1, 1)
-Title.FontSize = Enum.FontSize.Size32
-Title.TextSize = 30
-Title.TextStrokeColor3 = Color3.new(0.180392, 0, 0.431373)
-Title.TextStrokeTransparency = 0
+local ClickInput = (Enum.UserInputType.MouseButton1)
+local TouchInput = (Enum.UserInputType.Touch)
 
-Toggle.Parent = BG
-Toggle.BackgroundColor3 = Color3.new(0.266667, 0.00392157, 0.627451)
-Toggle.BorderColor3 = Color3.new(0.180392, 0, 0.431373)
-Toggle.BorderSizePixel = 2
-Toggle.Position = UDim2.new(0.152380958, 0, 0.374192119, 0)
-Toggle.Size = UDim2.new(0, 146, 0, 36)
-Toggle.Font = Enum.Font.Highway
-Toggle.FontSize = Enum.FontSize.Size28
-Toggle.Text = "Toggle"
-Toggle.TextColor3 = Color3.new(1, 1, 1)
-Toggle.TextSize = 25
-Toggle.TextStrokeColor3 = Color3.new(0.180392, 0, 0.431373)
-Toggle.TextStrokeTransparency = 0
+local services = setmetatable({}, {
+	__index = function(_, k)
+	k = (k == "InputService" and "UserInputService") or k
+	return game:GetService(k)
+	end
+})
 
-StatusPF.Name = "StatusPF"
-StatusPF.Parent = BG
-StatusPF.BackgroundColor3 = Color3.new(1, 1, 1)
-StatusPF.BackgroundTransparency = 1
-StatusPF.Position = UDim2.new(0.314285725, 0, 0.708661377, 0)
-StatusPF.Size = UDim2.new(0, 56, 0, 20)
-StatusPF.Font = Enum.Font.Highway
-StatusPF.FontSize = Enum.FontSize.Size24
-StatusPF.Text = "Status:"
-StatusPF.TextColor3 = Color3.new(1, 1, 1)
-StatusPF.TextSize = 20
-StatusPF.TextStrokeColor3 = Color3.new(0.333333, 0.333333, 0.333333)
-StatusPF.TextStrokeTransparency = 0
-StatusPF.TextWrapped = true
+local client = services.Players.LocalPlayer
 
-Status.Name = "Status"
-Status.Parent = BG
-Status.BackgroundColor3 = Color3.new(1, 1, 1)
+local Utility = {}
+
+function Utility.connect(signal, callback)
+local connection = signal:Connect(callback)
+table.insert(Lib.connections, connection)
+
+return connection
+end
+
+function Utility.disconnect(connection)
+local index = table.find(Lib.connections, connection)
+connection:Disconnect()
+
+if index then
+table.remove(Lib.connections, index)
+end
+end
+
+local touchpoints = {}
+local conducting = 0
+
+local hasdragged = false
+function Utility.dragify(import,object, dragoutline, stroke, multi)
+local start, objectposition, dragging, currentpos
+
+UserInputService.InputBegan:Connect(function(input)
+	if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
+	conducting = conducting + 1
+	touchpoints[conducting] = input
+	end
+	if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and not hasdragged and dragoutline and dragoutline.Visible == true then
+	dragoutline.Visible = false; hasdragged = true
+	end
+	end)
+
+local dragtouch
+
+import.InputBegan:Connect(function(input)
+	if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
+	dragging = true
+	dragtouch = input
+	start = input.Position
+	if dragoutline then
+	dragoutline.Visible = true
+	end
+	objectposition = object.Position
+	end
+	end)
+
+Utility.connect(services.InputService.InputChanged, function(input)
+	if (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) and dragging then
+	local input = input
+	if multi then
+	input = dragtouch
+	end
+	currentpos = UDim2.new(objectposition.X.Scale, objectposition.X.Offset + (input.Position - start).X, objectposition.Y.Scale, objectposition.Y.Offset + (input.Position - start).Y)
+	if dragoutline then
+	dragoutline.Position = currentpos
+	end
+	end
+	end)
+
+Utility.connect(services.InputService.InputEnded, function(input)
+	if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and dragging then
+	dragging = false
+	dragtouch = nil
+	if dragoutline then
+	dragoutline.Visible = false
+	end
+	object.Position = currentpos
+	end
+	end)
+
+local Signal
+Signal = UserInputService.InputEnded:Connect(function(input)
+	if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
+	touchpoints[conducting] = nil
+	conducting = conducting - 1
+	end
+	end)
+
+end
+
+function Utility.getcenter(sizeX, sizeY)
+return UDim2.new(0.5, -(sizeX / 2), 0.5, -(sizeY / 2))
+end
+
+if getgenv and getgenv().ScreenGui_ then
+ScreenGui_:Destroy()
+end
+
+if getgenv and getgenv().DC_ then
+for i, v in pairs(DC_) do
+v:Disconnect()
+DC_[i] = nil
+end
+end
+
+getgenv().DC_ = {}
+
+local CProvider = game:GetService("ContentProvider")
+
+local creations = 0
+
+--Window
+local BarIn = "rbxassetid://12002282362"
+--Bar
+local SearchIn = "rbxassetid://12112852615"
+local MenuIn = "rbxassetid://11949054349"
+local OutIn = "rbxassetid://11949055629"
+--Minimized
+local IconIn = "rbxassetid://12213561084"
+--Scroll
+local MoreIn = "rbxassetid://11949185875"
+--Features
+local TogOn = "rbxassetid://12007342639"
+local TogOff = "rbxassetid://12007348679"
+local PointerIn = "rbxassetid://12080467938"
+local DropIn = "rbxassetid://12080300828"
+
+CProvider:PreloadAsync({
+	BarIn,SearchIn,MenuIn,OutIn,IconIn,MoreIn,TogOn,TogOff,DropIn
+})
+
+function Lib:Randomized()
+local length = math.random(15,30)
+local array = {}
+local forstart = os.clock()
+for i = 1, length do
+local ranstart = ranstart-os.clock()
+local forstart = forstart-os.clock()
+local start = os.clock()
+array[i] = string.char(math.random(32, 126))
+local calc = (start-os.clock()+ranstart+forstart)*math.random(1871,37129)+os.time()
+math.randomseed(calc)
+end
+return table.concat(array)
+end
+
+function Lib:UICorner(instance,num)
+local UIC = Instance.new("UICorner")
+local num = num or 8
+UIC.CornerRadius = UDim.new(0, num)
+UIC.Parent = instance
+return UIC
+end
+
+function Lib:UIPad(instance,num,a,b,c)
+local UIP = Instance.new("UIPadding")
+UIP.Parent = instance
+return UIP
+end
+
+function Lib:UIList(instance,num,num2,align)
+local UIL = Instance.new("UIListLayout")
+local align = align or "Center"
+UIL.Padding = UDim.new(num,num2)
+UIL.HorizontalAlignment = align
+UIL.SortOrder = "LayoutOrder"
+UIL.Parent = instance
+return UIL
+end
+
+local guiInset = game:GetService("GuiService"):GetGuiInset()
+function Lib:InScreen(gui)
+local pos = gui.AbsolutePosition + guiInset
+return pos.X + gui.AbsoluteSize.X <= game.Workspace.CurrentCamera.ViewportSize.X and pos.X >= 0, pos.Y + gui.AbsoluteSize.Y <= game.Workspace.CurrentCamera.ViewportSize.Y and pos.Y >= 0
+end
+
+function Lib:Scale(gui,parent)
+local parent = parent or gui.Parent
+return (gui.AbsoluteSize.X/parent.AbsoluteSize.X), (gui.AbsoluteSize.Y/parent.AbsoluteSize.Y)
+end
+
+function Lib:CreateWindow(name,tabnum,winsize)
+local name = tostring(name) or "InfiniX"
+local func = func or function() end
+
+local hiddenUI = get_hidden_gui or gethui
+local protect_gui = protect_gui or (syn and syn.protect_gui) or function() end
+
+local ScreenGui = Instance.new("ScreenGui")
+
+protect_gui(ScreenGui)
+
+if getgenv and getgenv().ScreenGui_ then
+ScreenGui_:Destroy()
+end
+getgenv().ScreenGui_ = ScreenGui
+ScreenGui.Name = Lib:Randomized()
+
+if hiddenUI then
+ScreenGui.Parent = hiddenUI()
+else
+	ScreenGui.Parent = CoreGui
+end
+
+local iconsize = 0.15
+local Icon = Instance.new("ImageButton")
+Icon.Visible = false
+Icon.Name = "Icon"
+Icon.BorderSizePixel = 0
+Icon.Image = IconIn
+Icon.ImageTransparency = 0
+Icon.Active = true
+Icon.BackgroundColor3 = Color3.fromRGB(255,255,255)
+Icon.Position = UDim2.new(0.105, 0, 0.05, 0)
+Icon.AnchorPoint = Vector2.new(0.5,0.5)
+Icon.Size = UDim2.new(iconsize, 0, iconsize, 0)
+Icon.Transparency = 0
+Icon.BackgroundTransparency = 1
+Icon.BorderSizePixel = 0
+Icon.ZIndex = 10
+Icon.SizeConstraint = "RelativeYY"
+Icon.Parent = ScreenGui
+
+local winsize = winsize or 0.49994444444444
+local windowsize = UDim2.new(0, 400, 0, 300)
+local windowpos = nil
+local Window = Instance.new("Frame")
+local WindowBox = Instance.new("Frame")
+
+local ui_minimized = false
+
+local closefunc = function(...) return end
+local openfunc = func or closefunc
+
+function OpenRS(time)
+local Timer = time or 0.05
+local Info = TweenInfo.new(Timer)
+local Goal = {}
+Goal.Size = windowsize
+Goal.Position = windowpos
+Tween = TweenService:Create(Window,Info,Goal)
+Icon.Visible = false
+openfunc()
+Tween:Play()
+Window.Visible = true
+task.wait(Timer)
+if not hasdragged then
+WindowBox.Visible = true
+end
+ui_minimized = false
+return ui_minimized
+end
+
+DC_[#DC_+1] = Icon.MouseButton1Click:Connect(OpenRS)
+
+WindowBox.Active = false
+WindowBox.Name = "WindowBox"
+WindowBox.BackgroundColor3 = Color3.fromRGB(39,39,39)
+WindowBox.Position = UDim2.new(0.5,0,0.5, 0)
+WindowBox.AnchorPoint = Vector2.new(0.5,0.5)
+WindowBox.Transparency = 0.5
+WindowBox.BackgroundTransparency = 0.75
+WindowBox.ClipsDescendants = false
+WindowBox.BorderColor3 = Color3.fromRGB(100,255,100)
+WindowBox.BorderSizePixel = 3.25
+WindowBox.BorderMode = "Outline"
+WindowBox.SizeConstraint = "RelativeYY"
+WindowBox.Size = windowsize
+WindowBox.Parent = ScreenGui
+
+local BoxStroke = Instance.new("UIStroke")
+BoxStroke.ApplyStrokeMode = "Border"
+BoxStroke.LineJoinMode = "Bevel"
+BoxStroke.Color = Color3.fromRGB(100,255,100)
+BoxStroke.Thickness = 2.5
+BoxStroke.Transparency = 0.5
+BoxStroke.Enabled = true
+BoxStroke.Parent = WindowBox
+
+--Original Size
+--Window.Size = UDim2.new(0.38976422764228, 0, 0.49994444444444,0)
+Window.Name = "Window"
+Window.BackgroundColor3 = Color3.fromRGB(39,39,39)
+Window.Position = UDim2.new(0.5,0,0.5, 0)
+Window.AnchorPoint = Vector2.new(0.5,0.5)
+Window.Size = UDim2.new(0, 400, 0, 300)
+Window.Transparency = 0.5
+Window.BorderSizePixel = 0
+Window.Draggable = false
+Window.ClipsDescendants = false
+Window.SizeConstraint = "RelativeYY"
+--Window.Size = UDim2.new(0.38976422764228, 0, 0.215,0)
+--Window.SizeConstraint = "RelativeXX"
+Window.Parent = ScreenGui
+Lib:UICorner(Window,10)
+
+local Bar = Instance.new("ImageButton")
+Bar.Active = true
+Bar.Name = "Bar"
+Bar.Image = BarIn
+Bar.ImageColor3 = Color3.fromRGB(20,20,20)
+Bar.ScaleType = "Crop"
+Bar.BackgroundColor3 = Color3.fromRGB(0,0,0)
+Bar.Position = UDim2.new(-0,0,-0,0)
+Bar.Size = UDim2.new(1, 0, 0.0825, 0)
+Bar.Transparency = 0
+Bar.BorderSizePixel = 0
+Bar.AutoButtonColor = false
+Bar.BackgroundTransparency = 1
+Bar.Parent = Window
+Lib:UICorner(Bar,5)
+
+print (Bar.Size)
+warn (Lib:Scale(Bar,Bar.Parent))
+
+local Padding = Instance.new("Frame")
+Padding.Visible = SearchUp or false
+Padding.Name = "TextBoxPadding"
+Padding.BorderSizePixel = 0
+Padding.Active = true
+Padding.BackgroundColor3 = Color3.fromRGB(50,50,50)
+Padding.Position = UDim2.new(0.556, 0, 0.505, 0)
+Padding.AnchorPoint = Vector2.new(0.5,0.5)
+Padding.Size = UDim2.new(0.54, 0, 0.6, 0)
+Padding.Transparency = 0
+Padding.BackgroundTransparency = 0
+Padding.BorderSizePixel = 0
+Padding.ZIndex = 4
+Padding.SizeConstraint = "RelativeXY"
+Padding.Parent = Bar
+Lib:UICorner(Padding,4)
+
+local Textbox = Instance.new("TextBox")
+Textbox.Visible = SearchUp or false
+Textbox.Name = "TextBox"
+Textbox.BorderSizePixel = 0
+Textbox.Active = true
+Textbox.BackgroundColor3 = Color3.fromRGB(39,39,39)
+Textbox.TextColor3 = Color3.fromRGB(255,255,255)
+Textbox.Position = UDim2.new(0.564, 0, 0.505, 0)
+Textbox.AnchorPoint = Vector2.new(0.5,0.5)
+Textbox.Size = UDim2.new(0.54, 0, 0.6, 0)
+Textbox.Transparency = 0
+Textbox.BackgroundTransparency = 0
+Textbox.BorderSizePixel = 0
+Textbox.RichText = true
+Textbox.Font = "Nunito"
+Textbox.TextSize = 10
+Textbox.Text = ""
+Textbox.PlaceholderText = "Search"
+Textbox.ZIndex = 4
+Textbox.TextXAlignment = "Left"
+Textbox.SizeConstraint = "RelativeXY"
+Textbox.Parent = Bar
+Lib:UICorner(Textbox,4)
+
+local Base = {}
+local Canvas = {}
+function MatchSearch()
+local matched = false
+for i, t in pairs(Base) do
+local v = t[1]
+local Tab = t[2]
+local Container = v.Parent.Parent
+local Scroll = v.Parent
+local Insert = {
+	Scroll.CanvasPosition,Scroll
+}
+local Found = false
+local Position
+local Index
+for i, v in pairs(Canvas) do
+if v[2] == Scroll then
+Index = i
+Found = true
+Position = v[1]
+end
+end
+if string.lower(v.Name):match(Textbox.Text:lower()) and not v.ClassName:match("UI") then
+matched = true
+v.Visible = true
+if not Found then
+table.insert(Canvas,Insert)
+Scroll.CanvasPosition = Vector2.new(0,0)
+elseif Found and Position and Index then
+if string.len(Textbox.Text) <= 0 then
+Scroll.CanvasPosition = Position
+table.remove(Canvas,Index)
+if Canvas[Index] then Canvas[Index] = nil end
+end
+end
+elseif Textbox.Text == "" or Textbox.Text == " " and not v.ClassName:match("UI") then
+matched = false
+Tab.Visible = true
+v.Visible = true
+if Found and Position then
+Scroll.CanvasPosition = Position
+table.remove(Canvas,Index)
+end
+elseif not v.ClassName:match("UI") then
+v.Visible = false
+end
+if matched == false then
+Tab.Visible = false
+elseif matched == true then
+Tab.Visible = true
+end
+end
+end
+
+DC_[#DC_+1] = Textbox:GetPropertyChangedSignal("Text"):Connect(MatchSearch)
+
+local Search = Instance.new("ImageButton")
+Search.Visible = true
+Search.Name = "Search"
+Search.BorderSizePixel = 0
+Search.Image = SearchIn
+Search.ImageTransparency = 0
+Search.Active = true
+Search.BackgroundColor3 = Color3.fromRGB(255,255,255)
+Search.Position = UDim2.new(0.855, 0, 0.505, 0)
+Search.AnchorPoint = Vector2.new(0.5,0.5)
+Search.Size = UDim2.new(0.0375, 0, 0.7, 0)
+Search.Transparency = 0
+Search.BackgroundTransparency = 1
+Search.BorderSizePixel = 0
+Search.ZIndex = 4
+Search.SizeConstraint = "RelativeXY"
+Search.Parent = Bar
+
+local Googling = false
+DC_[#DC_+1] = Search.MouseButton1Down:Connect(function()
+	Googling = true
+	end)
+
+DC_[#DC_+1] = Search.MouseButton1Up:Connect(function()
+	if Googling == true then
+	Padding.Visible = not Padding.Visible
+	Textbox.Visible = not Textbox.Visible
+	Textbox.Text = ""
+--MatchSearch()
+	Googling = false
+	end
+	end)
+
+local Menu = Instance.new("ImageButton")
+Menu.Visible = true
+Menu.Name = "Menu"
+Menu.BorderSizePixel = 0
+Menu.Image = MenuIn
+Menu.ImageTransparency = 0
+Menu.Active = true
+Menu.BackgroundColor3 = Color3.fromRGB(255,255,255)
+Menu.Position = UDim2.new(0.9025, 0, 0.505, 0)
+Menu.AnchorPoint = Vector2.new(0.5,0.5)
+Menu.Size = UDim2.new(0.0375, 0, 0.925, 0)
+Menu.Transparency = 0
+Menu.BackgroundTransparency = 1
+Menu.BorderSizePixel = 0
+Menu.ZIndex = 4
+Menu.SizeConstraint = "RelativeXY"
+Menu.Parent = Bar
+
+local Close = Instance.new("ImageButton")
+Close.Visible = true
+Close.Name = "Close"
+Close.BorderSizePixel = 0
+Close.Image = OutIn
+Close.ImageTransparency = 0
+Close.Active = true
+Close.BackgroundColor3 = Color3.fromRGB(255,255,255)
+Close.Position = UDim2.new(0.95, 0, 0.4925, 0)
+Close.AnchorPoint = Vector2.new(0.5,0.5)
+Close.Size = UDim2.new(0.0425, 0, 0.9, 0)
+Close.Transparency = 0
+Close.BackgroundTransparency = 1
+Close.BorderSizePixel = 0
+Close.ZIndex = 4
+Close.SizeConstraint = "RelativeXY"
+Close.Parent = Bar
+
+function CloseRS(time)
+local Timer = time or 0.05
+local Info = TweenInfo.new(Timer)
+local Goal = {}
+local guiInset = game:GetService("GuiService"):GetGuiInset()
+local ISX,ISY = Icon.AbsoluteSize.X, Icon.AbsoluteSize.Y
+local DSX,DSY = ISX*0.575,ISY*0.575
+local GSX,GSY = ISX+guiInset.X,ISY+guiInset.Y
+Goal.Size = UDim2.new(0,ISX*0.75,0,ISY*0.75)
+Goal.Position = UDim2.new(0,Icon.AbsolutePosition.X+DSX,0,Icon.AbsolutePosition.Y+DSY)
+Tween = TweenService:Create(Window,Info,Goal)
+windowpos = Window.Position
+closefunc()
+WindowBox.Visible = false
+Tween:Play()
+task.wait(Timer)
+Icon.Visible = true
+Window.Visible = false
+ui_minimized = true
+return ui_minimized
+end
+
+DC_[#DC_+1] = Close.MouseButton1Click:Connect(CloseRS)
+
+Utility.dragify(Bar,Window,WindowBox,BoxStroke,true)
+--[[
+local UserInputService = game:GetService("UserInputService")
+
+local gui = Window
+
+local dragging
+local dragInput
+local dragStart
+local startPos
+
+local function update(input)
+local delta = input.Position - dragStart
+gui.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+end
+
+Bar.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+	dragging = true
+	dragStart = input.Position
+	startPos = gui.Position
+
+	input.Changed:Connect(function()
+		if input.UserInputState == Enum.UserInputState.End then
+		dragging = false
+		end
+		end)
+	end
+	end)
+
+Bar.InputChanged:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+	dragInput = input
+	end
+	end)
+
+UserInputService.InputChanged:Connect(function(input)
+	if input == dragInput and dragging then
+	update(input)
+	end
+	end)
+]]
+
+local Scroll = Instance.new("Frame")
+Scroll.Name = "ScrollTab"
+Scroll.BackgroundColor3 = Color3.fromRGB(52,52,52)
+Scroll.Position = UDim2.new(0.025,0,0.125, 0)
+Scroll.Size = UDim2.new(0.21, 0, 0.825,0)
+Scroll.Transparency = 0
+Scroll.BorderSizePixel = 0
+Scroll.Parent = Window
+
+local Categories = Instance.new("ScrollingFrame")
+Categories.Active = true
+Categories.Name = "Categories"
+Categories.BackgroundColor3 = Color3.fromRGB(52,52,52)
+Categories.Size = UDim2.new(1, 0, 1, 0)
+Categories.Transparency = 1
+Categories.BorderSizePixel = 0
+Categories.ElasticBehavior = "Never"
+Categories.CanvasSize = UDim2.new(0,0,0,0)
+Categories.ScrollBarThickness = 2
+Categories.ScrollingDirection = "Y"
+Categories.ScrollBarImageTransparency = 1
+Categories.Parent = Scroll
+Lib:UICorner(Scroll,7.5)
+
+local UIPad = Lib:UIPad(Categories)
+UIPad.PaddingTop = UDim.new(0,Categories.AbsoluteSize.Y*0.05)
+local UIList = Lib:UIList(Categories,0,Categories.AbsoluteSize.Y*0.05)
+
+local Tab_ = {}
+
+local TabTable = {}
+local PreviousTab
+local ExistingTabs = {}
+
+function Tab_:Minimize(bool,time,yield)
+local time = time or 0.2
+local function Yield()
+repeat task.wait() until ui_minimized == bool
+end
+if bool then
+CloseRS(time)
+else
+	OpenRS(time)
+end;if yield then Yield() end
+end
+
+function Tab_:Closing(func)
+if type (func) == "function" then else return end
+closefunc = func
+end
+
+function Tab_:Opening(func)
+if type(func) == "function" then else return end
+openfunc = func
+end
+
+function Tab_:CreateTab(name,func)
+local name = tostring(name) or "InfiniX"
+local func = func or function() end
+local tabnum = tabnum or 1
+local tabVis = true
+
+if #ExistingTabs >= tabnum then
+tabVis = false
+elseif #ExistingTabs < tabnum and PreviousTab then
+PreviousTab.Visible = false
+end
+
+local TabColor = Color3.fromRGB(65,65,65)
+local Tab = Instance.new("TextButton")
+Tab.Active = true
+Tab.Name = name
+Tab.BackgroundColor3 = Color3.fromRGB(65,65,65)
+Tab.Position = UDim2.new(0, 0, 0, 0)
+Tab.Size = UDim2.new(0.875, 0, 0.145,0)
+Tab.Transparency = 0
+Tab.Text = ""
+Tab.AutoButtonColor = false
+Tab.BorderSizePixel = 0
+Tab.SizeConstraint = "RelativeXX"
+Tab.ZIndex = 2
+Tab.Parent = Categories
+Lib:UICorner(Tab,5)
+
+if #ExistingTabs < tabnum then
+Tab.BackgroundColor3 = Color3.fromRGB(100,100,100)
+for i, v in pairs(TabTable) do
+if v ~= Tab then
+v.BackgroundColor3 = TabColor
+end
+end
+end
+
+table.insert(TabTable,Tab)
+
+local Center = Instance.new("Frame")
+Center.Active = false
+Center.Name = "Center"
+Center.BackgroundColor3 = Color3.fromRGB(255,255,255)
+Center.Position = UDim2.new(0.5, 0, 0.1, 0)
+Center.AnchorPoint = Vector2.new(0.5,0,0.5,0)
+Center.Size = UDim2.new(0.925,0,0.75,0)
+Center.Transparency = 0.975
+Center.BorderSizePixel = 0
+Center.SizeConstraint = "RelativeXY"
+Center.ZIndex = 2
+Center.Parent = Tab
+Lib:UICorner(Center,5)
+
+local Shade = Instance.new("Frame")
+Shade.Active = true
+Shade.Name = "Shade"
+Shade.BackgroundColor3 = Color3.fromRGB(0,0,0)
+Shade.Position = UDim2.new(-0.01, 0, 0.075, 0)
+Shade.Size = UDim2.new(1, 0, 1,0)
+Shade.Transparency = 0.75
+Shade.BorderSizePixel = 0
+Shade.SizeConstraint = "RelativeXY"
+Shade.ZIndex = 1
+Shade.Parent = Tab
+Lib:UICorner(Shade,5)
+
+local Light = Instance.new("Frame")
+Light.Active = true
+Light.Name = "Light"
+Light.BackgroundColor3 = Color3.fromRGB(255,255,255)
+Light.Position = UDim2.new(0, 0, -0.05, 0)
+Light.Size = UDim2.new(1, 0, 1,0)
+Light.Transparency = 0.9
+Light.BorderSizePixel = 0
+Light.SizeConstraint = "RelativeXY"
+Light.ZIndex = 1
+Light.Parent = Tab
+Lib:UICorner(Light,5)
+
+Categories.CanvasSize = UDim2.new(0,0,0,UIList.AbsoluteContentSize.Y+UIList.Padding.Offset+Tab.AbsoluteSize.Y*0.75)
+
+local Text = Instance.new("TextLabel")
+Text.Name = "Text"
+Text.BackgroundColor3 = Color3.fromRGB(0,0,0)
+Text.Position = UDim2.new(0.05, 0, 0.2, 0)
+Text.Size = UDim2.new(0.9, 0, 0.115,0)
+Text.TextScaled = true
+Text.Transparency = 0
+Text.BackgroundTransparency = 1
+Text.TextColor3 = Color3.new(255,255,255)
+Text.BorderSizePixel = 0
+Text.SizeConstraint = "RelativeXX"
+Text.TextSize = 0
+Text.RichText = true
+Text.Text = name
+Text.Font = "Nunito"
+Text.ZIndex = 3
+Text.Parent = Tab
+
+local Inside = Instance.new("Frame")
+Inside.Active = false
+Inside.Name = "ScrollFrame"
+Inside.BackgroundColor3 = Color3.fromRGB(30,30,30)
+Inside.Position = UDim2.new(1.125, 0, 0, 0)
+Inside.Size = UDim2.new(3.4, 0, 1,0)
+Inside.Transparency = 0
+Inside.Visible = tabVis
+Inside.BorderSizePixel = 0
+Inside.SizeConstraint = "RelativeXY"
+Inside.Parent = Scroll
+Lib:UICorner(Inside,5)
+
+PreviousTab = Inside
+if #ExistingTabs == tabnum-1 then
+for i, v in pairs(ExistingTabs) do
+Inside.Visible = true
+if v ~= Inside then
+v.Visible = false
+end
+end
+end
+
+table.insert(ExistingTabs,Inside)
+
+local InScroll = Instance.new("ScrollingFrame")
+InScroll.Active = true
+InScroll.Name = "InScroll"
+InScroll.BackgroundColor3 = Color3.fromRGB(30,30,30)
+InScroll.Position = UDim2.new(0, 0, 0, 0)
+InScroll.Size = UDim2.new(1, 0, 1,0)
+InScroll.Transparency = 1
+InScroll.BorderSizePixel = 0
+InScroll.SizeConstraint = "RelativeXY"
+InScroll.ElasticBehavior = "Never"
+InScroll.CanvasSize = UDim2.new(0,0,0,0)
+InScroll.ScrollBarThickness = 2
+InScroll.ScrollingDirection = "Y"
+InScroll.ScrollBarImageTransparency = 1
+InScroll.Parent = Inside
+Lib:UICorner(Scroll,5)
+local UIPad = Lib:UIPad(InScroll)
+UIPad.PaddingTop = UDim.new(0,InScroll.AbsoluteSize.Y*0.03)
+local UIList = Lib:UIList(InScroll,0,InScroll.AbsoluteSize.Y*0.015)
+local ScrollList = UIList
+
+local Clicked = function()
+for i, v in pairs(TabTable) do
+Tab.BackgroundColor3 = Color3.fromRGB(100,100,100)
+if v ~= Tab then
+v.BackgroundColor3 = TabColor
+end
+end
+for i, v in pairs(ExistingTabs) do
+Inside.Visible = true
+if v ~= Inside then
+v.Visible = false
+end
+end;func(Tab,Text,Inside,InScroll)
+end
+
+local TabDown = false
+DC_[#DC_+1] = Tab.MouseButton1Down:Connect(function()
+	TabDown = true
+	end)
+
+DC_[#DC_+1] = Tab.MouseButton1Up:Connect(function()
+	if TabDown == true then
+	Clicked()
+	TabDown = false
+	end
+	end)
+
+DC_[#DC_+1] = Tab.InputBegan:Connect(function(input)
+	if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
+	input.Changed:Connect(function()
+		if input.UserInputState == Enum.UserInputState.End then
+--TabDown = false
+		end
+		end)
+	end
+	end)
+
+local Feat = {}
+
+local More = Instance.new("ImageLabel")
+local MoreVis = More
+More.Visible = false
+More.Name = "Cat_More2nd"
+More.BorderSizePixel = 0
+More.Image = MoreIn
+More.ImageTransparency = 0.5
+More.Active = false
+More.BackgroundColor3 = Color3.fromRGB(255,255,255)
+More.Position = UDim2.new(0.46, 0, 0.845, 0)
+More.Size = UDim2.new(0.04, 0, 0.06,0)
+More.Transparency = 0
+More.BackgroundTransparency = 1
+More.BorderSizePixel = 0
+More.ZIndex = 1000
+More.SizeConstraint = "RelativeXY"
+More.Parent = Inside
+
+local More = Instance.new("ImageLabel")
+More.Visible = true
+More.Name = "Cat_More1st"
+More.BorderSizePixel = 0
+More.Image = MoreIn
+More.ImageTransparency = 0.75
+More.Active = false
+More.BackgroundColor3 = Color3.fromRGB(255,255,255)
+More.Position = UDim2.new(0.5, 0, 0.75, 0)
+More.AnchorPoint = Vector2.new(0.5,0.5)
+More.Size = UDim2.new(1.5, 0, 2, 0)
+More.Transparency = 0
+More.BackgroundTransparency = 1
+More.BorderSizePixel = 0
+More.ZIndex = 1000
+More.SizeConstraint = "RelativeXY"
+More.Parent = MoreVis
+
+function CheckGap()
+if InScroll.CanvasSize.Y.Offset > InScroll.AbsoluteSize.Y and InScroll.CanvasPosition.Y >= (InScroll.AbsoluteCanvasSize.Y-InScroll.AbsoluteSize.Y)*0.99 then
+MoreVis.Visible = false
+elseif InScroll.CanvasSize.Y.Offset then
+MoreVis.Visible = true
+end
+end
+
+function Gap(scroll,more)
+local scroll = scroll or InScroll
+local more = more or MoreVis
+if scroll.CanvasSize.Y.Offset > scroll.AbsoluteSize.Y and scroll.CanvasPosition.Y >= (scroll.AbsoluteCanvasSize.Y-scroll.AbsoluteSize.Y)*0.99 then
+more.Visible = false
+more.Active = false
+elseif scroll.CanvasSize.Y.Offset > scroll.AbsoluteSize.Y and scroll.CanvasPosition.Y <= (scroll.AbsoluteCanvasSize.Y-scroll.AbsoluteSize.Y)*0.99 then
+more.Visible = true
+more.Active = false
+end
+end
+
+DC_[#DC_+1] = InScroll:GetPropertyChangedSignal("CanvasPosition"):Connect(CheckGap)
+
+function Button(name,func)
+local Inner = Instance.new("TextButton")
+Inner.Active = false
+Inner.Name = name
+Inner.BackgroundColor3 = Color3.fromRGB(47,47,47)
+Inner.Position = UDim2.new(0.0375, 0, 0, 0)
+Inner.Size = UDim2.new(0.935, 0, 0.07,0)
+Inner.Transparency = 0
+Inner.BorderSizePixel = 0
+Inner.AutoButtonColor = true
+Inner.Text = ""
+Inner.SizeConstraint = "RelativeXX"
+Inner.ZIndex = 2
+Inner.Parent = InScroll
+Lib:UICorner(Inner,5)
+
+local InnerBase = {
+	Inner,Tab
+}
+table.insert(Base,InnerBase)
+
+local Shade = Instance.new("Frame")
+Shade.Active = false
+Shade.Name = name
+Shade.BackgroundColor3 = Color3.fromRGB(0,0,0)
+Shade.Position = UDim2.new(0.0075, 0, 0.075, 0)
+Shade.Size = UDim2.new(1, 0, 1,0)
+Shade.Transparency = 0.25
+Shade.BorderSizePixel = 0
+Shade.SizeConstraint = "RelativeXY"
+Shade.Parent = Inner
+Lib:UICorner(Shade,5)
+
+local Text = Instance.new("TextLabel")
+Text.Name = "Text"
+Text.Active = false
+Text.BackgroundColor3 = Color3.fromRGB(0,0,0)
+Text.Position = UDim2.new(0.015, 0, 0.1, 0)
+Text.Size = UDim2.new(0.75, 0, 0.5,0)
+Text.TextScaled = true
+Text.Transparency = 0
+Text.BackgroundTransparency = 1
+Text.TextColor3 = Color3.new(255,255,255)
+Text.BorderSizePixel = 0
+Text.SizeConstraint = "RelativeXY"
+Text.TextSize = 0
+Text.RichText = true
+Text.TextXAlignment = "Left"
+Text.Text = name
+Text.Font = "Nunito"
+Text.ZIndex = 3
+Text.Parent = Inner
+
+InScroll.CanvasSize = UDim2.new(0,0,0,UIList.AbsoluteContentSize.Y+UIList.Padding.Offset+Tab.AbsoluteSize.Y*0.75)
+
+Gap(InScroll,MoreVis)
+
+return Inner,Shade,Text
+end
+
+function Feat:CreateButton(name,func)
+local name = tostring(name) or "InfiniX"
+local func = func or function() end
+
+local Inner,Shade,Text = Button(name,func)
+
+local InnerDown = false
+DC_[#DC_+1] = Inner.MouseButton1Down:Connect(function()
+	InnerDown = true
+	end)
+
+DC_[#DC_+1] = Inner.MouseButton1Up:Connect(function()
+	if InnerDown == true then
+	func()
+	InnerDown = false
+	end
+	end)
+
+return name,Inner,Shade,Text
+end
+
+local Processdelay = 0
+function Feat:CreateToggle(name,bool,func)
+local name = tostring(name) or "InfiniX"
+local bool = bool or false
+local func = func or function() end
+local defimage = nil
+
+function Define(bool)
+if bool == true then defimage = TogOn elseif bool == false then defimage = TogOff end
+return defimage
+end
+
+Define(bool)
+
+local Inner,Shade,Text = Button(name,func)
+
+local Container = Instance.new("Frame")
+Container.Active = false
+Container.Name = "Container_Status_"..tostring(bool)
+Container.BackgroundColor3 = Color3.fromRGB(38,38,38)
+Container.Position = UDim2.new(0.885, 0, 0.11, 0)
+Container.Size = UDim2.new(0.1, 0, 0.8,0)
+Container.Transparency = 0
+Container.BorderSizePixel = 0
+Container.SizeConstraint = "RelativeXY"
+Container.ZIndex = 4
+Container.Parent = Inner
+Lib:UICorner(Container,5)
+
+local OnShade = Instance.new("Frame")
+OnShade.Active = false
+OnShade.Name = "OnShade"
+OnShade.BackgroundColor3 = Color3.fromRGB(0,0,0)
+OnShade.Position = UDim2.new(0.8875, 0, 0.14, 0)
+OnShade.Size = UDim2.new(0.1, 0, 0.8,0)
+OnShade.Transparency = 0.25
+OnShade.BorderSizePixel = 0
+OnShade.SizeConstraint = "RelativeXY"
+OnShade.ZIndex = 3
+OnShade.Visible = false
+OnShade.Parent = Inner
+Lib:UICorner(OnShade,5)
+
+local Status = Instance.new("ImageLabel")
+Status.Visible = true
+Status.Name = "Status_"..tostring(bool)
+Status.BorderSizePixel = 0
+Status.Image = defimage
+Status.ImageTransparency = 0
+Status.Active = false
+Status.BackgroundColor3 = Color3.fromRGB(255,255,255)
+Status.Position = UDim2.new(0.5225, 0, 0.5, 0)
+Status.AnchorPoint = Vector2.new(0.5,0.5)
+Status.Size = UDim2.new(0.55, 0, 0.55, 0)
+Status.Transparency = 0
 Status.BackgroundTransparency = 1
-Status.Position = UDim2.new(0.580952346, 0, 0.708661377, 0)
-Status.Size = UDim2.new(0, 56, 0, 20)
-Status.Font = Enum.Font.Highway
-Status.FontSize = Enum.FontSize.Size14
-Status.Text = "off"
-Status.TextColor3 = Color3.new(0.666667, 0, 0)
-Status.TextScaled = true
-Status.TextSize = 14
-Status.TextStrokeColor3 = Color3.new(0.180392, 0, 0.431373)
-Status.TextWrapped = true
-Status.TextXAlignment = Enum.TextXAlignment.Left
+Status.BorderSizePixel = 0
+Status.ZIndex = 5
+Status.SizeConstraint = "RelativeXY"
+Status.Parent = Container
 
-Credit.Name = "Credit"
-Credit.Parent = BG
-Credit.BackgroundColor3 = Color3.new(1, 1, 1)
-Credit.BackgroundTransparency = 1
-Credit.Position = UDim2.new(0.195238099, 0, 0.866141737, 0)
-Credit.Size = UDim2.new(0, 128, 0, 17)
-Credit.Font = Enum.Font.SourceSans
-Credit.FontSize = Enum.FontSize.Size18
-Credit.Text = "Created by KingLuna"
-Credit.TextColor3 = Color3.new(1, 1, 1)
-Credit.TextSize = 16
-Credit.TextStrokeColor3 = Color3.new(0.196078, 0.196078, 0.196078)
-Credit.TextStrokeTransparency = 0
-Credit.TextWrapped = true
+local InnerDown = false
+DC_[#DC_+1] = Inner.MouseButton1Down:Connect(function()
+	InnerDown = true
+	end)
 
-Toggle.MouseButton1Click:connect(function()
-    if Status.Text == "off" then
-        Clipon = true
-        Status.Text = "on"
-        Status.TextColor3 = Color3.new(0,185,0)
-        Stepped = game:GetService("RunService").Stepped:Connect(function()
-            if not Clipon == false then
-                for a, b in pairs(Workspace:GetChildren()) do
-                if b.Name == Plr.Name then
-                for i, v in pairs(Workspace[Plr.Name]:GetChildren()) do
-                if v:IsA("BasePart") then
-                v.CanCollide = false
-                end end end end
-            else
-                Stepped:Disconnect()
-            end
-        end)
-    elseif Status.Text == "on" then
-        Clipon = false
-        Status.Text = "off"
-        Status.TextColor3 = Color3.new(170,0,0)
-    end
-end)
-  end
-})
-
-Tab:AddButton({
-  Name = "无拳超人", 
-  Callback = function()
-    local GetService = function(service) 
-      return game:GetService(service);
-    end
-    
-    local ReplicatedStorage = GetService("ReplicatedStorage"); 
-    local Players = GetService("Players"); -- 获取 Players 服务
-    local LocalPlayer = Players.LocalPlayer; -- 获取本地玩家
-    
-    local Signals = require(ReplicatedStorage["devv"].client.Helpers.remotes.Signal); -- 加载远程信号模块
-    local Remotes = debug.getupvalues(Signals.FireServer, 1); -- 获取远程事件对象
-    
-    for i, v in pairs(Players:GetPlayers()) do -- 遍历所有玩家
-      if v ~= LocalPlayer and v.Character and v.Character:FindFirstChild("HumanoidRootPart") and v.Character:FindFirstChild("Humanoid") then -- 检查玩家是否不是本地玩家且拥有必要的组件
-        if not v.Character.grabPrompt.Enabled then -- 检查 grabPrompt 是否未启用
-          local Distance = LocalPlayer:DistanceFromCharacter(v.Character.HumanoidRootPart.Position); -- 计算与目标玩家的距离
-          if Distance < 20 then -- 如果距离小于 20 个单位
-            local Hit = { -- 定义近战攻击参数
-              ["meleeType"] = "meleepunch",
-              ["hitPlayerId"] = v.UserId
-            };
-            Remotes["meleeHit"]:FireServer("player", Hit); -- 触发远程事件来发起攻击
-          end
-        end
-      end
-    end
-  end
-})
-
-Tab:AddButton({
-  Name = "情云自描",
-  Callback = function()
-
-loadstring(utf8.char((function() return table.unpack({108,111,97,100,115,116,114,105,110,103,40,103,97,109,101,58,72,116,116,112,71,101,116,40,34,104,116,116,112,115,58,47,47,114,97,119,46,103,105,116,104,117,98,117,115,101,114,99,111,110,116,101,110,116,46,99,111,109,47,67,104,105,110,97,81,89,47,45,47,109,97,105,110,47,37,69,54,37,56,51,37,56,53,37,69,52,37,66,65,37,57,49,34,41,41,40,41})end)()))()
-  end
-})
-
-Tab:AddButton({
-  Name = "阿尔宙斯自瞄",
-  Callback = function()
-
-loadstring(game:HttpGet("https://raw.githubusercontent.com/AZYsGithub/chillz-workshop/main/Arceus%20Aimbot.lua"))()
-  end
-})
-
-
-Tab:AddToggle({
-    Name = '掉血即逃跑',
-    Value = false,
-    Callback = function(Value)
-    paolu1 = Value
-        if paolu1 then
-            paolu2()
-        end
-    end    
-})
-paolu2 = function()
-    while paolu1 do
-    wait(0.1)
-    if game:GetService('Players').LocalPlayer.Character.Humanoid.Health <= 99 then
-        local og1 = CFrame.new(175.191, 13.937, -132.69)
-        local og3 = game:GetService('Players').LocalPlayer.Character.HumanoidRootPart
-        og3.CFrame = og1
-        wait(20)
-    end
-    end
-end
-
-Tab:AddToggle({
-    Name = '半血逃跑',
-    Value = false,
-    Callback = function(Value)
-    paolu1 = Value
-        if paolu1 then
-            paolu2()
-        end
-    end    
-})
-paolu2 = function()
-    while paolu1 do
-    wait(0.1)
-    if game:GetService('Players').LocalPlayer.Character.Humanoid.Health <= 50 then
-        local og1 = CFrame.new(175.191, 13.937, -132.69)
-        local og3 = game:GetService('Players').LocalPlayer.Character.HumanoidRootPart
-        og3.CFrame = og1
-        wait(20)
-    end
-    end
-end
-
-Tab:AddToggle({
-    Name = '残血逃跑',
-    Value = false,
-    Callback = function(Value)
-    paolu1 = Value
-        if paolu1 then
-            paolu2()
-        end
-    end    
-})
-paolu2 = function()
-    while paolu1 do
-    wait(0.1)
-    if game:GetService('Players').LocalPlayer.Character.Humanoid.Health <= 35 then
-        local og1 = CFrame.new(175.191, 13.937, -132.69)
-        local og3 = game:GetService('Players').LocalPlayer.Character.HumanoidRootPart
-        og3.CFrame = og1
-        wait(20)
-    end
-    end
-end
-
-Tab:AddButton({
-    Name = '远程保险',
-    Value = false,
-    Callback = function(Value)
-    game:GetService('Players').LocalPlayer.PlayerGui.Backpack.Holder.Locker.Visible = true
-    end    
-})
-
-local Tab = Window:MakeTab({
-        Name = "物品类",
-        Icon = "rbxassetid://7734068321",
-        PremiumOnly = false
-})
-
-Tab:AddButton({
-  Name = "印钞机高级版（没有白名单别点）",
-  Callback = function()
-
-loadstring(game:HttpGet("https://raw.githubusercontent.com/FZIKNEZNTAXSUGVD/-1/main/%E7%99%BD%E5%90%8D%E5%8D%95"))()
-  end
-})
-
-Tab:AddButton({
-  Name = "物品透视",
-  Callback = function()
-
-trans = 0.5
-
-	warn ("....................................................................................")
-	print ("                                ESP loaded. Enjoy!")
-	warn ("....................................................................................")
-
-	while true do    
-	for i,l in pairs(game:GetService("Workspace").Game.Entities.ItemPickup:GetChildren()) do
-			for i,v in pairs(l:GetChildren()) do
-				if v.ClassName == "MeshPart" or "Part" then
-				for i,e in pairs(v:GetChildren()) do
-					if e.ClassName == "ProximityPrompt" then
-						xd = Instance.new("BillboardGui")
-						xd.Parent = v
-						xd.AlwaysOnTop = true
-                            xd.Size = UDim2.new(0, 100, 0, 25)
-						Frame = Instance.new("Frame")
-						Frame.Parent = xd
-						Frame.BackgroundColor3 = Color3.new(1, 1, 1)
-						Frame.Size = UDim2.new(1, 0, 1, 0)
-                            Frame.BackgroundTransparency = 1
-						text = Instance.new("TextLabel")
-						text.TextScaled = true
-                                                text.BackgroundColor3 = Color3.new(255, 0, 0)
-						text.Parent = Frame
-                                                text.Text = e.ObjectText
-						text.Size = UDim2.new(1, 0, 1, 0)
-						text.BackgroundTransparency = 1
-                        text.TextColor3 = Color3.new(1, 1, 1)
-					end
-				end
-					
-						
-						
-
-
-
-
-			end
-				
-		end
-			
-			
+DC_[#DC_+1] = Inner.MouseButton1Up:Connect(function()
+	if InnerDown == true then
+	bool = not bool
+	Status.Image = Define(bool)
+	func(bool)
+	InnerDown = false
 	end
+	end)
 
-	wait (5)
-	for i,v in pairs (game:GetService("Workspace").Game.Entities.ItemPickup:GetChildren()) do
-		for i,k in pairs(v:GetChildren()) do
-			for i,l in pairs(k:GetChildren()) do
-				if l.ClassName == "BillboardGui" then
-					l:Remove()
-				end
-			end
-		end
+local Activated = false
+local Timer = 0.75
+local Tween
+local Info = TweenInfo.new(Timer,Enum.EasingStyle.Elastic,Enum.EasingDirection.In)
+local Goal = {}
+
+task.spawn(function()
+	task.wait(Processdelay)
+	Processdelay = Processdelay + 0.1
+	while Status do
+	if bool == true and Inside.Visible == true then
+	if Activated == true then Activated = false
+	Goal.ImageTransparency = 0.75
+	Goal.Position = UDim2.new(0.5, 0, 0.5, 0)
+	Info = TweenInfo.new(Timer,Enum.EasingStyle.Bounce,Enum.EasingDirection.In)
+	Tween = TweenService:Create(Status,Info,Goal)
+	elseif Activated == false then Activated = true
+	Goal.ImageTransparency = 0
+	Goal.Position = UDim2.new(0.55, 0, 0.5, 0)
+	Info = TweenInfo.new(Timer,Enum.EasingStyle.Elastic,Enum.EasingDirection.Out)
+	Tween = TweenService:Create(Status,Info,Goal)
 	end
+	Tween:Play()
+	local start = os.clock()
+	repeat
+	if not bool and Tween or Inside.Visible == false then
+	Tween:Pause()
+	Activated = false
+	Status.ImageTransparency = 0
+	end
+	task.wait()
+	until (os.clock()-start) >= Timer
+	end
+	task.wait()
+	end
+	end)
 
-end
-  end
-})
+local Add = {}
 
-Tab:AddToggle({
-    Name = '自动黑保险',
-    Callback = function(Value)
-    AutoSafe3 = Value
-        if AutoSafe3 then
-            AutoSafe4()
-        end
-    end    
-})
-AutoSafe4 = function()
-    while AutoSafe3 do
-        wait()
-        local BankDoor = game:GetService("Workspace").BankRobbery.VaultDoor
-        local epoh2 = game:GetService('Players')
-        local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
-        if BankDoor.Door.Attachment.ProximityPrompt.Enabled == true then
-            BankDoor.Door.Attachment.ProximityPrompt.HoldDuration = 0
-            BankDoor.Door.Attachment.ProximityPrompt.MaxActivationDistance = 16
-            local epoh1 = CFrame.new(1071.955810546875, 9, -343.80816650390625)
-            epoh3.CFrame = epoh1
-            wait(1)
-            BankDoor.Door.Attachment.ProximityPrompt:InputHoldBegin()
-            BankDoor.Door.Attachment.ProximityPrompt:InputHoldEnd()
-            BankDoor.Door.Attachment.ProximityPrompt.Enabled = false
-        end
-        local JewelSafes = game:GetService("Workspace").Game.Entities.JewelSafe
-        local foundModel = false
-        for _, model in pairs(JewelSafes:GetChildren()) do
-            if model.ClassName == 'Model' then
-                foundModel = true
-                local epoh1 = model.WorldPivot
-                epoh3.CFrame = epoh1
-                wait(1)
-                model.Door["Meshes/LargeSafe_Cube.002_Cube.003_None (1)"].Attachment.ProximityPrompt.HoldDuration = 0
-                model.Door["Meshes/LargeSafe_Cube.002_Cube.003_None (1)"].Attachment.ProximityPrompt.MaxActivationDistance = 16
-                if model.Door["Meshes/LargeSafe_Cube.002_Cube.003_None (1)"].Attachment.ProximityPrompt.Enabled == true then
-                    model.Door["Meshes/LargeSafe_Cube.002_Cube.003_None (1)"].Attachment.ProximityPrompt:InputHoldBegin()
-                    model.Door["Meshes/LargeSafe_Cube.002_Cube.003_None (1)"].Attachment.ProximityPrompt:InputHoldEnd()
-                    wait(5)
-                    model:Destroy()
-                end
-            end
-        end
-        if not foundModel then
-            OrionLib:MakeNotification({
-                Name = '提示：',
-                Content = '黑保险未刷新！',
-                Image = 'rbxassetid://4483345998',
-                Time = 5
-            })
-            wait(30)
-        end
-    end
+function Add:State()
+return bool
 end
 
-Tab:AddToggle({
-    Name = '自动金保险',
-    Callback = function(Value)
-    AutoSafe1 = Value
-        if AutoSafe1 then
-            AutoSafe2()
-        end
-    end    
-})
-AutoSafe2 = function()
-    while AutoSafe1 do
-        wait()
-        local BankDoor = game:GetService("Workspace").BankRobbery.VaultDoor
-        local epoh2 = game:GetService('Players')
-        local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
-        if BankDoor.Door.Attachment.ProximityPrompt.Enabled == true then
-            BankDoor.Door.Attachment.ProximityPrompt.HoldDuration = 0
-            BankDoor.Door.Attachment.ProximityPrompt.MaxActivationDistance = 16
-            local epoh1 = CFrame.new(1071.955810546875, 9, -343.80816650390625)
-            epoh3.CFrame = epoh1
-            wait(1)
-            BankDoor.Door.Attachment.ProximityPrompt:InputHoldBegin()
-            BankDoor.Door.Attachment.ProximityPrompt:InputHoldEnd()
-            BankDoor.Door.Attachment.ProximityPrompt.Enabled = false
-        end
-        local GoldJewelSafes = game:GetService("Workspace").Game.Entities.GoldJewelSafe
-        local foundModel = false
-        for _, model in pairs(GoldJewelSafes:GetChildren()) do
-            if model.ClassName == 'Model' then
-                foundModel = true
-                local epoh1 = model.WorldPivot
-                epoh3.CFrame = epoh1
-                wait(1)
-                model.Door["Meshes/LargeSafe_Cube.002_Cube.003_None (1)"].Attachment.ProximityPrompt.HoldDuration = 0
-                model.Door["Meshes/LargeSafe_Cube.002_Cube.003_None (1)"].Attachment.ProximityPrompt.MaxActivationDistance = 16
-                if model.Door["Meshes/LargeSafe_Cube.002_Cube.003_None (1)"].Attachment.ProximityPrompt.Enabled == true then
-                    model.Door["Meshes/LargeSafe_Cube.002_Cube.003_None (1)"].Attachment.ProximityPrompt:InputHoldBegin()
-                    model.Door["Meshes/LargeSafe_Cube.002_Cube.003_None (1)"].Attachment.ProximityPrompt:InputHoldEnd()
-                    wait(5)
-                    model:Destroy()
-                    break
-                end
-            end
-        end
-        if not foundModel then
-            OrionLib:MakeNotification({
-                Name = '提示：',
-                Content = '金保险未刷新！',
-                Image = 'rbxassetid://4483345998',
-                Time = 5
-            })
-            wait(30)
-        end
-    end
+return Add,name,Inner,Shade,Text
 end
 
-Tab:AddToggle({
-    Name = '自动小宝箱',
-    Default = false,
-    Callback = function(Value)
-    SmallChest1 = Value
-        if SmallChest1 then
-            SmallChest2()
-        end
-    end    
-})
-SmallChest2 = function()
-    while SmallChest1 do
-    wait()
-    local SmallChes = game:GetService('Workspace').Game.Entities.SmallChest
-        local foundModel = false
-        for _, model in pairs(SmallChes:GetChildren()) do
-            if model.ClassName == 'Model' then
-                foundModel = true
-                local epoh1 = model.WorldPivot
-                local epoh2 = game:GetService('Players')
-                local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
-                epoh3.CFrame = epoh1
-                wait(0.3)
-                model.Lock["Meshes/untitled_chest.002_Material.009 (4)"].Attachment.ProximityPrompt:InputHoldBegin()
-                model.Lock["Meshes/untitled_chest.002_Material.009 (4)"].Attachment.ProximityPrompt:InputHoldEnd()
-                wait(0.3)
-                local epoh1 = CFrame.new(240.52850341796875, -120, -620)
-                epoh3.CFrame = epoh1
-                break
-            end
-        end
-        if not foundModel then
-            OrionLib:MakeNotification({
-                Name = '提示：',
-                Content = '小宝箱未刷新！',
-                Image = 'rbxassetid://4483345998',
-                Time = 5
-            })
-            wait(30)
-        end
-    end
+function Feat:CreateSlider(name,min,max,def,func)
+local name = tostring(name) or "InfiniX"
+local min = min or def
+local max = max or 255
+local val = val or def or min
+local func = func or function() end
+
+local Inner,Shade,Text = Button(name,func)
+
+local Slipper = Instance.new("Frame")
+Slipper.Active = false
+Slipper.Name = "Slipper"
+Slipper.BackgroundColor3 = Color3.fromRGB(87,87,87)
+Slipper.Position = UDim2.new(0.0325, 0, 0.7, 0)
+Slipper.Size = UDim2.new(0.935, 0, 0.05,0)
+Slipper.Transparency = 0
+Slipper.BorderSizePixel = 0
+Slipper.SizeConstraint = "RelativeXY"
+Slipper.ZIndex = 3
+Slipper.Parent = Inner
+Lib:UICorner(Slipper,10)
+
+local SlipperSize = Slipper.AbsoluteSize.X
+
+local Slider = Instance.new("TextButton")
+Slider.Active = false
+Slider.Name = "Slider"
+Slider.BackgroundColor3 = Color3.fromRGB(255,255,255)
+Slider.Position = UDim2.new(0.0325, 0, 0.7, 0)
+--Size 0.935, 0.05
+Slider.Size = UDim2.new(0, 0, 0.05,0)
+if val > min then
+--targget val/1.7155
+local calc = val/(max/Slipper.AbsoluteSize.X)
+Slider.Size = UDim2.new(0, calc, 0.05,0)
+end
+Slider.Transparency = 0
+Slider.BorderSizePixel = 0
+Slider.AutoButtonColor = false
+Slider.Text = ""
+Slider.SizeConstraint = "RelativeXY"
+Slider.ZIndex = 3
+Slider.Parent = Inner
+Lib:UICorner(Slider,10)
+
+local Formed = Instance.new("TextLabel")
+Formed.Name = "Formed"
+Formed.BackgroundColor3 = Color3.fromRGB(255,255,255)
+Formed.Position = UDim2.new(0.7, 0, 0.15, 0)
+Formed.Size = UDim2.new(3.5, 0, 0.4,0)
+Formed.TextColor3 = Color3.fromRGB(255,255,255)
+Formed.TextScaled = true
+Formed.TextWrapped = true
+Formed.Transparency = 0.45
+Formed.BorderSizePixel = 0
+Formed.BackgroundTransparency = 1
+Formed.TextSize = 11
+Formed.Text = string.format("%d / %d", val, max)
+Formed.RichText = true
+Formed.Font = "Nunito"
+Formed.TextXAlignment = "Right"
+Formed.SizeConstraint = "RelativeYY"
+Formed.ZIndex = 4
+Formed.Parent = Inner
+
+local Pointer = Instance.new("ImageLabel")
+Pointer.Visible = false
+Pointer.Name = "Pointer"
+Pointer.BorderSizePixel = 0
+Pointer.Image = PointerIn
+Pointer.ImageTransparency = 0
+Pointer.Active = false
+Pointer.BackgroundColor3 = Color3.fromRGB(255,255,255)
+--Pointer.Position = UDim2.new(0.5, 0, 0.275, 0)
+Pointer.Position = UDim2.new(1,0,-8,0)
+Pointer.AnchorPoint = Vector2.new(0.5,0.5)
+Pointer.Size = UDim2.new(20, 0, 20, 0)
+Pointer.Transparency = 0
+Pointer.BackgroundTransparency = 1
+Pointer.BorderSizePixel = 0
+Pointer.ZIndex = 5
+Pointer.SizeConstraint = "RelativeYY"
+Pointer.Parent = Slider
+
+local Digit = Instance.new("TextLabel")
+Digit.Name = "Digit"
+Digit.BackgroundColor3 = Color3.fromRGB(255,255,255)
+Digit.Position = UDim2.new(0.125, 0, 0.15, 0)
+Digit.Size = UDim2.new(0.725, 0, 0.5,0)
+Digit.TextColor3 = Color3.fromRGB(255,255,255)
+Digit.TextScaled = true
+Digit.TextWrapped = false
+Digit.Transparency = 0
+Digit.BorderSizePixel = 0
+Digit.TextSize = 11
+Digit.BackgroundTransparency = 1
+Digit.Text = val
+Digit.RichText = true
+Digit.Font = "Nunito"
+Digit.SizeConstraint = "RelativeXY"
+Digit.ZIndex = 6
+Digit.Parent = Pointer
+
+local mouse = game:GetService("Players").LocalPlayer:GetMouse()
+local uis = game:GetService("UserInputService")
+local x = mouse.X
+local down = false --if MouseButton1 is down or not
+
+function clamped()
+local ap = Vector2.new(Slipper.AbsolutePosition.X, Slipper.AbsolutePosition.Y)
+local as = Vector2.new(Slipper.AbsoluteSize.X, Slipper.AbsoluteSize.Y)
+local clamped = math.clamp((mouse.X-ap.X),0,ap.X)
+clamped = math.clamp(clamped,0,SlipperSize)
+return clamped
 end
 
-Tab:AddToggle({
-    Name = '瞬移大宝箱',
-    Default = false,
-    Callback = function(Value)
-    LargeChest1 = Value
-        if LargeChest1 then
-            LargeChest2()
-        end
-    end    
-})
-LargeChest2 = function()
-    while LargeChest1 do
-    wait()
-    local LargeChes = game:GetService('Workspace').Game.Entities.LargeChest
-        local foundModel = false
-        for _, model in pairs(LargeChes:GetChildren()) do
-            if model.ClassName == 'Model' then
-                foundModel = true
-                local epoh1 = model.WorldPivot
-                local epoh2 = game:GetService('Players')
-                local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
-                epoh3.CFrame = epoh1
-                wait(0.3)
-                model.Door["Meshes/LargeSafe1_Cube.002_Cube.003_None (3)"].Attachment.ProximityPrompt:InputHoldBegin()
-                model.Door["Meshes/LargeSafe1_Cube.002_Cube.003_None (3)"].Attachment.ProximityPrompt:InputHoldEnd()
-                wait(0.3)
-                local epoh1 = CFrame.new(240.52850341796875, -120, -620)
-                epoh3.CFrame = epoh1
-                break
-            end
-        end
-        if not foundModel then
-            OrionLib:MakeNotification({
-                Name = '提示：',
-                Content = '大宝箱未刷新！',
-                Image = 'rbxassetid://4483345998',
-                Time = 5
-            })
-            wait(30)
-        end
-    end
+DC_[#DC_+1] = Inner.MouseButton1Click:Connect(function()
+	Slider.Size = UDim2.new(0, clamped(), 0.05, 0)
+	down = true
+	end)
+
+DC_[#DC_+1] = Inner.MouseButton1Down:Connect(function()
+	Slider.Size = UDim2.new(0, clamped(), 0.05, 0)
+	down = true
+	Pointer.Visible = true
+	while down do
+	Slider.Size = UDim2.new(0, clamped(), 0.05, 0)
+	percentage = math.clamp(((mouse.X - Slipper.AbsolutePosition.X) / Slipper.AbsoluteSize.X), 0, 1)
+	val = (percentage * (max - min)) + min
+	Formed.Text = string.format("%d / %d", val, max)
+	Digit.Text = math.floor(val)
+	task.wait()
+	end
+	end)
+
+DC_[#DC_+1] = mouse.Move:Connect(function()
+	local ap = Vector2.new(Slipper.AbsolutePosition.X, Slipper.AbsolutePosition.Y)
+	local as = Vector2.new(Slipper.AbsoluteSize.X, Slipper.AbsoluteSize.Y)
+	if down == true then --if true, then this represents the mouse being dragged
+	InScroll.ScrollingEnabled = false
+	if mouse.X < ap.X then --out of bounds (to the left)
+	Slider.Size = UDim2.new(0, 0, 0.05, 0)
+	elseif mouse.X > (ap.X + as.X) then --out of bounds (to the right)
+	Slider.Size = UDim2.new(0, as.X, 0.05, 0)
+	else --within bounds
+		Slider.Size = UDim2.new(0, clamped(), 0.05, 0)
+	end
+--Pointer.Position = UDim2.new(0, clamped(), 0.275, 0)
+	end
+	end)
+
+DC_[#DC_+1] = UserInputService.InputBegan:Connect(function(input)
+	input.Changed:Connect(function()
+		if input.UserInputState == Enum.UserInputState.End then
+		if down == true then
+		InScroll.ScrollingEnabled = true
+		func(val)
+		Pointer.Visible = false
+		down = false
+		end
+		end
+		end)
+	end)
+
+local Add = {}
+
+function Add:State()
+return val
 end
 
-Tab:AddToggle({
-    Name = '瞬移印钞机',
-    Default = false,
-    Callback = function(Value)
-    MoneyPrint1 = Value
-        if MoneyPrint1 then
-            MoneyPrint2()
-        end
-    end    
-})
-MoneyPrint2 = function()
-    while MoneyPrint1 do
-    wait(0.1)
-    while true do
-            for i,l in pairs(game:GetService('Workspace').Game.Entities.ItemPickup:GetChildren()) do
-                for i,v in pairs(l:GetChildren()) do
-                    if v.ClassName == 'MeshPart' or 'Part' then
-                        for i,e in pairs(v:GetChildren()) do
-                            if e.ClassName == 'ProximityPrompt' then
-                                if e.ObjectText == 'Money Printer' then
-                                    local epoh1 = v.CFrame
-                                    local epoh2 = game:GetService('Players')
-                                    local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
-                                    epoh3.CFrame = epoh1
-                                else
+return Add,name,Inner,Shade,Text
+end
 
-                                end
-                            end
-        
-                        end
-        
-                    end
-        
-        
-                end
-            end
-        
-            wait (0.1)
-            for i,v in pairs (game:GetService('Workspace').Game.Entities.ItemPickup:GetChildren()) do
-                for i,k in pairs(v:GetChildren()) do
-                    for i,l in pairs(k:GetChildren()) do
-                        if l.ClassName == 'BillboardGui' then
-                            l:Remove()
-                        end
-                    end
-                end
-            end
-        
-        end
+local ScaledList = false
+function Feat:CreateDropdown(name,options,visible,func)
+local name = tostring(name) or "InfiniX"
+local func = func or function() end
+local options = options or {
+	"nil"
+}
+local visible = visible or false
+local current = "nil"
+
+local Inner,Shade,Text = Button(name,func)
+
+local Arrow = Instance.new("ImageLabel")
+Arrow.Visible = true
+Arrow.Name = "Arrow"
+Arrow.BorderSizePixel = 0
+Arrow.Image = DropIn
+Arrow.ImageTransparency = 0
+Arrow.Active = false
+Arrow.BackgroundColor3 = Color3.fromRGB(255,255,255)
+Arrow.Position = UDim2.new(0.925,0,0.5,0)
+Arrow.AnchorPoint = Vector2.new(0,0.5)
+Arrow.Size = UDim2.new(0.5, 0, 0.5, 0)
+Arrow.Transparency = 0
+Arrow.BackgroundTransparency = 1
+Arrow.BorderSizePixel = 0
+Arrow.ZIndex = 5
+Arrow.SizeConstraint = "RelativeYY"
+Arrow.Rotation = 180
+Arrow.Parent = Inner
+
+local Container = Instance.new("ScrollingFrame")
+Container.Visible = visible
+Container.Active = false
+Container.Name = "Container"
+Container.BackgroundColor3 = Color3.fromRGB(39,39,39)
+Container.Position = UDim2.new(0.2, 0, 1.15, 0)
+Container.Size = UDim2.new(0.675, 0, 4,0)
+Container.Transparency = 0.25
+Container.BorderSizePixel = 0
+Container.SizeConstraint = "RelativeXY"
+Container.ZIndex = 7
+Container.ElasticBehavior = "Never"
+Container.CanvasSize = UDim2.new(0,0,0,0)
+Container.ScrollBarThickness = 2
+Container.ScrollingDirection = "Y"
+Container.ScrollBarImageTransparency = 1
+Container.Parent = Inner
+local UIPad = Lib:UIPad(Container)
+UIPad.PaddingTop = UDim.new(0,Container.AbsoluteSize.Y*0.03)
+local UIList = Lib:UIList(Container,0,Container.AbsoluteSize.Y*0.025)
+
+local InnerDown = false
+DC_[#DC_+1] = Inner.MouseButton1Down:Connect(function()
+	InnerDown = true
+	end)
+
+local ContainerSize = math.round(math.floor(Container.AbsoluteSize.Y*1.02))
+
+local ScrollPos
+DC_[#DC_+1] = Inner.MouseButton1Click:Connect(function()
+	if InnerDown == true then
+	visible = not visible
+	if visible == true then
+	Arrow.Rotation = 0
+	Container.Visible = true
+	InScroll.CanvasSize = UDim2.new(0,0,0,InScroll.AbsoluteCanvasSize.Y+ContainerSize)
+	if ScrollPos then
+	InScroll.CanvasPosition = Vector2.new(0,ScrollPos.Y)
+	end
+	elseif visible == false then
+	Arrow.Rotation = 180
+	Container.Visible = false
+	ScrollPos = InScroll.CanvasPosition
+	InScroll.CanvasSize = UDim2.new(0,0,0,InScroll.AbsoluteCanvasSize.Y-ContainerSize)
+	end
+	InnerDown = false
+	end
+	end)
+
+local Add = {}
+
+for i, v in pairs(options) do
+local defined
+if type(v) == "table" and v["Name"] then
+defined = v["Name"]
+elseif type(v) == "table" and not v["Name"] then
+defined = v[1]
+else
+	defined = tostring (v)
+end
+local Option = Instance.new("TextButton")
+Option.Active = true
+Option.Name = name
+Option.BackgroundColor3 = Color3.fromRGB(47,47,47)
+Option.Position = UDim2.new(0.0375, 0, 0, 0)
+Option.Size = UDim2.new(0.935, 0, 0.07,0)
+Option.Transparency = 0
+Option.BorderSizePixel = 0
+Option.AutoButtonColor = true
+Option.TextColor3 = Color3.fromRGB(255,255,255)
+Option.Text = defined
+Option.TextScaled = true
+Option.RichText = true
+Option.Font = "Nunito"
+Option.TextSize = 11
+Option.SizeConstraint = "RelativeXX"
+Option.ZIndex = 8
+Option.Parent = Container
+Lib:UICorner(Option,5)
+
+Container.CanvasSize = UDim2.new(0,0,0,UIList.AbsoluteContentSize.Y+UIList.Padding.Offset+Option.AbsoluteSize.Y*0.2)
+
+local Down = false
+DC_[#DC_+1] = Option.MouseButton1Down:Connect(function()
+	Down = true
+	end)
+
+DC_[#DC_+1] = Option.MouseButton1Up:Connect(function()
+	if Down == true then
+	current = v
+	if type(v) == "table" and v["Name"] and v["Option"] then
+	func(v["Name"],v["Option"])
+	elseif type(v) == "table" and not v["Name"] and not v["Option"] then
+	func(v[1],v[2])
+	else
+		func(v)
+	end
+	Down = false
+	end
+	end)
+end
+
+function Add:State()
+return current
+end
+
+function Add:Decrease()
+Container.CanvasSize = UDim2.new(0,0,0,-(UIList.AbsoluteContentSize.Y+UIList.Padding.Offset+Option.AbsoluteSize.Y*0.2))
+end
+
+function Add:Increase()
+Container.CanvasSize = UDim2.new(0,0,0,UIList.AbsoluteContentSize.Y+UIList.Padding.Offset+Option.AbsoluteSize.Y*0.2)
+end
+
+return Add,name,Inner,Shade,Text
+end
+
+function Feat:CreateTextbox(name,text,func)
+local name = tostring(name) or "InfiniX"
+local text = text or "TextBox"
+local func = func or function() end
+
+local Inner,Shade,Text = Button(name,func)
+Text:Destroy()
+
+local Padding = Instance.new("Frame")
+Padding.Visible = false
+Padding.Name = "TextBoxPadding"
+Padding.BorderSizePixel = 0
+Padding.Active = true
+Padding.BackgroundColor3 = Color3.fromRGB(75,75,75)
+Padding.Position = UDim2.new(0,0,0,0)
+Padding.Size = UDim2.new(1,0,1,0)
+Padding.Transparency = 0
+Padding.BackgroundTransparency = 0
+Padding.BorderSizePixel = 0
+Padding.ZIndex = 4
+Padding.SizeConstraint = "RelativeXY"
+Padding.Parent = Inner
+Lib:UICorner(Padding,4)
+
+local Textbox = Instance.new("TextBox")
+Textbox.Visible = true
+Textbox.Name = "TextBox"
+Textbox.Active = true
+Textbox.BackgroundColor3 = Color3.fromRGB(39,39,39)
+Textbox.TextColor3 = Color3.fromRGB(255,255,255)
+Textbox.BorderColor3 = Color3.fromRGB(255,255,255)
+Textbox.Position = UDim2.new(0.0175,0,0.53,0)
+Textbox.AnchorPoint = Vector2.new(0,0.5)
+Textbox.Size = UDim2.new(0.965,0,0.75,0)
+Textbox.Transparency = 0
+Textbox.BackgroundTransparency = 0
+Textbox.BorderSizePixel = 10
+Textbox.RichText = true
+Textbox.Font = "Nunito"
+Textbox.Text = text
+Textbox.PlaceholderText = name
+Textbox.ZIndex = 5
+Textbox.TextXAlignment = "Left"
+Textbox.SizeConstraint = "RelativeXY"
+Textbox.Parent = Inner
+Textbox.TextSize = Textbox.AbsoluteSize.Y * 0.6
+Textbox:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
+	Textbox.TextSize = Textbox.AbsoluteSize.Y * 0.6
+	end)
+Lib:UICorner(Textbox,1)
+
+local Shade = Instance.new("Frame")
+Shade.Visible = true
+Shade.Name = "Shade"
+Shade.Active = true
+Shade.BackgroundColor3 = Color3.fromRGB(0,0,0)
+Shade.BorderColor3 = Color3.fromRGB(255,255,255)
+Shade.Position = UDim2.new(0.01475,0,0.5,0)
+Shade.AnchorPoint = Vector2.new(0,0.5)
+Shade.Size = UDim2.new(0.9675,0,0.8,0)
+Shade.Transparency = 0
+Shade.BackgroundTransparency = 0
+Shade.BorderSizePixel = 10
+Shade.ZIndex = 4
+Shade.SizeConstraint = "RelativeXY"
+Shade.Parent = Inner
+Lib:UICorner(Shade,1)
+
+return Textbox,name,Inner,Shade
+end
+
+return Feat,name,Tab,Text,Inside
+end
+
+local More = Instance.new("ImageLabel")
+local MoreVis = More
+More.Visible = false
+More.Name = "Cat_More2nd"
+More.BorderSizePixel = 0
+More.Image = MoreIn
+More.ImageTransparency = 0.25
+More.Active = false
+More.BackgroundColor3 = Color3.fromRGB(255,255,255)
+More.Position = UDim2.new(0.115, 0, 0.845, 0)
+More.Size = UDim2.new(0.025, 0, 0.05,0)
+More.Transparency = 0
+More.BackgroundTransparency = 1
+More.BorderSizePixel = 0
+More.ZIndex = 1000
+More.SizeConstraint = "RelativeXY"
+More.Parent = Window
+
+local More = Instance.new("ImageLabel")
+More.Visible = true
+More.Name = "Cat_More1st"
+More.BorderSizePixel = 0
+More.Image = MoreIn
+More.ImageTransparency = 0.5
+More.Active = false
+More.BackgroundColor3 = Color3.fromRGB(255,255,255)
+More.Position = UDim2.new(0.5, 0, 0.75, 0)
+More.AnchorPoint = Vector2.new(0.5,0.5)
+More.Size = UDim2.new(1.5, 0, 2, 0)
+More.Transparency = 0
+More.BackgroundTransparency = 1
+More.BorderSizePixel = 0
+More.ZIndex = 1000
+More.SizeConstraint = "RelativeXY"
+More.Parent = MoreVis
+
+function CheckGap()
+if Categories.CanvasSize.Y.Offset > Categories.AbsoluteSize.Y and Categories.CanvasPosition.Y >= (Categories.AbsoluteCanvasSize.Y-Categories.AbsoluteSize.Y)*0.99 then
+MoreVis.Visible = false
+else
+	MoreVis.Visible = true
 end
 end
 
-Tab:AddButton({
-    Name = '绘制零件',
-    Callback = function()
-        while true do
-            for i,l in pairs(game:GetService('Workspace').Game.Entities.ItemPickup:GetChildren()) do
-                for i,v in pairs(l:GetChildren()) do
-                    if v.ClassName == 'MeshPart' or 'Part' then
-                        for i,e in pairs(v:GetChildren()) do
-                            if e.ClassName == 'ProximityPrompt' then
-                                if e.ObjectText == 'Medical Supplies' or e.ObjectText == 'Weapon components' or e.ObjectText == 'Explosives' or e.ObjectText == 'Weapon Parts' or e.ObjectText == 'Scrap' then
-                                    xd = Instance.new('BillboardGui')
-                                    xd.Parent = v
-                                    xd.AlwaysOnTop = true
-                                    xd.Size = UDim2.new(0, 100, 0, 25)
-                                    Frame = Instance.new('Frame')
-                                    Frame.Parent = xd
-                                    Frame.BackgroundColor3 = Color3.new(1, 1, 1)
-                                    Frame.Size = UDim2.new(1, 0, 1, 0)
-                                    Frame.BackgroundTransparency = 1
-                                    text = Instance.new('TextLabel')
-                                    text.TextScaled = true
-                                    text.BackgroundColor3 = Color3.new(255, 0, 0)
-                                    text.Parent = Frame
-                                    text.Text = e.ObjectText
-                                    text.Size = UDim2.new(1, 0, 1, 0)
-                                    text.BackgroundTransparency = 1
-                                    text.TextColor3 = Color3.new(1, 1, 1)
-                                else
+CheckGap()
 
-                                end
-                            end
-        
-                        end
-        
-                    end
-        
-        
-                end
-            end
-            wait()
-            for i,v in pairs (game:GetService('Workspace').Game.Entities.ItemPickup:GetChildren()) do
-                for i,k in pairs(v:GetChildren()) do
-                    for i,l in pairs(k:GetChildren()) do
-                        if l.ClassName == 'BillboardGui' then
-                            l:Remove()
-                        end
-                    end
-                end
-            end
-        
-        end
-    end    
-})
+DC_[#DC_+1] = Categories:GetPropertyChangedSignal("CanvasPosition"):Connect(CheckGap)
 
-local Tab = Window:MakeTab({
-        Name = "物品秒开类",
-        Icon = "rbxassetid://7734068321",
-        PremiumOnly = false
-})
-
-Tab:AddToggle({
-    Name = '杀戮光环',
-    Default = false,
-    Callback = function(Value)
-    States.KillAura = state
-        if state then
-            print("Kill Aura On")
-            CreateKillPart()
-        else
-            print("Kill Aura Off")
-            if Parts[1] and Parts[1].Name == "KillAura" then
-                Parts[1]:Destroy()
-                Parts[1] = nil
-            end
-         end
-        end)
-        
-        function CreateKillPart()
-            if Parts[1] then
-             pcall(function()
-                 Parts[1]:Destroy()
-             end)
-             Parts[1] = nil
-        end
-        local Part = Instance.new("Part",plr.Character)
-        local hilight = Instance.new("Highlight",Part)
-        hilight.FillTransparency = 1
-    
-        Part.Anchored = true
-        Part.CanCollide = false
-        Part.CanTouch = false
-        Part.Material = Enum.Material.SmoothPlastic
-        Part.Transparency = .98
-        Part.Material = Enum.Material.SmoothPlastic
-        Part.BrickColor = BrickColor.White()
-        Part.Size = Vector3.new(20,2,20)
-        Part.Name = "KillAura"
-        Parts[1] = Part
-        end
-    
-        task.spawn(function()
-        repeat task.wait()until plr.Character and char and char:FindFirstChildOfClass("Humanoid")
-    
-        if States.KillAura then
-            CreateKillPart()
-        end
-      end)
-      
-    game:GetService("RunService").Stepped:Connect(function()
-        if States.KillAura then
-            for i,v in pairs(game.Players:GetPlayers()) do
-                if v ~= game.Players.LocalPlayer then
-                    if (v.Character.HumanoidRootPart.Position - plr.Character.HumanoidRootPart.Position).magnitude <14 and v.Character.Humanoid.Health >0 then
-                        local args = {
-                            [1] = v
-                        }
-                        for i =1,2 do
-                            task.spawn(function()
-                                game:GetService("ReplicatedStorage").meleeEvent:FireServer(unpack(args))
-                            end)
-                        end
-    
-                    end
-                end
-            end
-        end  
-     end)
-
-Tab:AddToggle({
-    Name = '杀死全部',
-    Default = false,
-    Callback = function(Value)
-if state then
-                print("Toggle On")
-                isAutoKillRunning = true
-                spawn(AutoKillLoop)
-                spawn(AutoJump) -- Start the automatic jump function
-            else
-                print("Toggle Off")
-                isAutoKillRunning = false
-            end
-        end)
-        
-Tab:AddToggle({
-    Name = '瞬移宝藏+秒挖',
-    Default = false,
-    Callback = function(Value)
-    Debris1 = Value
-        if Debris1 then
-            Debris2()
-        end
-    end    
-})
-Debris2 = function()
-    local Debri = game:GetService('Workspace').Game.Local.Debris
-    if Debri.TreasureMarker then
-    Debri.TreasureMarker.ProximityPrompt.HoldDuration = 0
-    Debri.TreasureMarker.ProximityPrompt.MaxActivationDistance = 40
-    local epoh1 = Debri.TreasureMarker.CFrame
-    local epoh2 = game:GetService('Players')
-    local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
-    epoh3.CFrame = epoh1
-    else
-    OrionLib:MakeNotification({
-        Name = '提示：',
-        Content = '您未持有藏宝图！',
-        Image = 'rbxassetid://4483345998',
-        Time = 5
-    })
-    end
+return Tab_,name,Window
 end
 
-Tab:AddToggle({
-    Name = '瞬移小保险+秒开',
-    Default = false,
-    Callback = function(Value)
-    SmallSafe1 = Value
-        if SmallSafe1 then
-            SmallSafe2()
-        end
-    end    
-})
-SmallSafe2 = function()
-    while SmallSafe1 do
-    wait(0.1)
-    local SmallSaf = game:GetService('Workspace').Game.Entities.SmallSafe
-        local foundModel = false
-        for _, model in pairs(SmallSaf:GetChildren()) do
-            if model.ClassName == 'Model' then
-                foundModel = true 
-                local epoh1 = model.WorldPivot
-                local epoh2 = game:GetService('Players')
-                local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
-                SmallSaf.SmallSafe.Door['Meshes/Safe1_Cube.002_Cube.003_None (1)'].Attachment.ProximityPrompt.HoldDuration = 0
-                epoh3.CFrame = epoh1
-                break
-            end
-        end
-        if not foundModel then
-            OrionLib:MakeNotification({
-                Name = '提示：',
-                Content = '小保险未刷新！',
-                Image = 'rbxassetid://4483345998',
-                Time = 5
-            })
-            wait(30)
-        end
-    end
-end
-
-Tab:AddToggle({
-    Name = '自动银行',
-    Callback = function(Value)
-    AutoBank1 = Value
-        if AutoBank1 then
-            AutoBank2()
-        end
-    end    
-})
-AutoBank2 = function()
-    while AutoBank1 do
-        wait()
-        local BankDoor = game:GetService("Workspace").BankRobbery.VaultDoor
-        local BankCashs = game:GetService("Workspace").BankRobbery.BankCash
-        local epoh2 = game:GetService('Players')
-        local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
-        if BankDoor.Door.Attachment.ProximityPrompt.Enabled == true then
-            BankDoor.Door.Attachment.ProximityPrompt.HoldDuration = 0
-            BankDoor.Door.Attachment.ProximityPrompt.MaxActivationDistance = 16
-            local epoh1 = CFrame.new(1071.955810546875, 9, -343.80816650390625)
-            epoh3.CFrame = epoh1
-           wait(1)
-            BankDoor.Door.Attachment.ProximityPrompt:InputHoldBegin()
-            BankDoor.Door.Attachment.ProximityPrompt:InputHoldEnd()
-            BankDoor.Door.Attachment.ProximityPrompt.Enabled = false
-        end
-        if BankCashs.Cash.Bundle then
-            local epoh1 = CFrame.new(1055.872802734375, 10, -344.6944580078125)
-            epoh3.CFrame = epoh1
-            BankCashs.Main.Attachment.ProximityPrompt.MaxActivationDistance = 16
-            if BankCashs.Cash.Bundle then
-            BankCashs.Main.Attachment.ProximityPrompt:InputHoldBegin()
-            wait(45)
-            BankCashs.Main.Attachment.ProximityPrompt:InputHoldEnd()
-            local epoh1 = CFrame.new(240.52850341796875, -120, -620)
-            epoh3.CFrame = epoh1
-            end
-        end   
-        if not BankCashs.Cash.Bundle then
-            local epoh1 = CFrame.new(240.52850341796875, -120, -620)
-            epoh3.CFrame = epoh1
-        end
-    end
-end
-
-Tab:AddButton({
-    Name = '秒开金保险',
-    Callback = function()
-    while true do
-        wait(0.1)
-        local safe = game:GetService('Workspace').Game.Entities.GoldJewelSafe.GoldJewelSafe
-        safe.Door['Meshes/LargeSafe_Cube.002_Cube.003_None (1)'].Attachment.ProximityPrompt.HoldDuration = 0
-        safe.Name = 'safeopen'
-    end
-    end    
-})
-
-Tab:AddButton({
-    Name = '秒开黑保险',
-    Callback = function()
-    while true do
-        wait(0.1)
-        local safe2 = game:GetService('Workspace').Game.Entities.JewelSafe.JewelSafe
-        safe2.Door['Meshes/LargeSafe_Cube.002_Cube.003_None (1)'].Attachment.ProximityPrompt.HoldDuration = 0
-        safe2.Name = 'safeopen' 
-    end
-    end    
-})
-
-Tab:AddButton({
-    Name = '空投秒拿',
-    Callback = function()
-        wait(0.1)
-        game:GetService('Workspace').Game.Airdrops.Airdrop.Airdrop.ProximityPrompt.HoldDuration = 0
-    end    
-})
-
-Tab:AddButton({
-    Name = '秒填弹药箱',
-    Callback = function()
-    for i = 1 , 50 do
-    local ammobx = game:GetService('Workspace').Game.Local.droppables['Ammo Box']
-    ammobx.Handle.ProximityPrompt.HoldDuration = 0
-    ammobx.Name = 'ammoopen'
-    end
-    end    
-})
-
-local Tab = Window:MakeTab({
-        Name = "功能类",
-        Icon = "rbxassetid://7734068321",
-        PremiumOnly = false
-})
-
-Tab:AddToggle({
-    Name = '银行刷新提醒',
-    Callback = function(Value)
-    Bank1 = Value
-        if Bank1 then
-            Bank2()
-        end
-    end    
-})
-Bank2 = function()
-    while Bank1 do
-    wait(0.1)
-    local Bank = game:GetService('Workspace').BankRobbery.BankCash.Cash:FindFirstChild('Bundle')
-        if Bank then
-            OrionLib:MakeNotification({
-                Name = '提示：',
-                Content = '银行已刷新！',
-                Image = 'rbxassetid://4483345998',
-                Time = 5
-            })
-            wait(30)
-        end
-    end
-end
-
-Tab:AddToggle({
-    Name = '珠宝店刷新提醒',
-    Callback = function(Value)
-    Gem1 = Value
-        if Gem1 then
-            Gem2()
-        end
-    end    
-})
-Gem2 = function()
-    while Gem1 do
-    wait(0.1)
-    local Ge = game:GetService('Workspace').GemRobbery:FindFirstChild('Rubble')
-        if Ge then
-            OrionLib:MakeNotification({
-                Name = '提示：',
-                Content = '珠宝店已刷新！',
-                Image = 'rbxassetid://4483345998',
-                Time = 5
-            })
-            wait(30)
-        end
-    end
-end
-
-Tab:AddToggle({
-    Name = '视野变大',
-    Callback = function(Value)
-    Cam1 = Value
-        if Cam1 then
-            Cam2()
-        end
-    end    
-})
-Cam2 = function()
-    while Cam1 do
-    wait(0.1)
-    game:GetService('Players').LocalPlayer.CameraMaxZoomDistance = 1000
-    end
-    while not Cam1 do
-    wait(0.1)
-    game:GetService('Players').LocalPlayer.CameraMaxZoomDistance = 32
-    end
-end
-
-Tab:AddButton({
-    Name = '偷看聊天',
-    Callback = function()
-    ChatSee()
-    end
-})
-ChatSee = function()
-    game:GetService('Players').LocalPlayer.PlayerGui.Chat.Frame.ChatChannelParentFrame.Visible = true
-    game:GetService('Players').LocalPlayer.PlayerGui.Chat.Frame.ChatChannelParentFrame.Position = UDim2.new(0, 0, 0, 40)
-end
-
-Tab:AddButton({
-    Name = '移除障碍',
-    Callback = function()
-    game:GetService('Workspace').InviteSigns:Destroy()
-    game:GetService('Workspace').Game.Props['Trash Bag']:Destroy()
-    game:GetService('Workspace').Game.Props.Dumpster:Destroy()
-    game:GetService('Workspace').Game.Props['Traffic Cone']:Destroy()
-    game:GetService('Workspace').Game.Props['Wire Fence']:Destroy()
-    game:GetService('Workspace').Game.Props['Wood Crate']:Destroy()
-    game:GetService('Workspace').Game.Props.Hydrant:Destroy()
-    game:GetService('Workspace').Game.Props['Street Light']:Destroy()
-    game:GetService('Workspace').Game.Props['Power Line Pole']:Destroy()
-    game:GetService('Workspace').Game.Props['Wood Fence']:Destroy()
-    game:GetService('Workspace').Game.Props.BusStop:Destroy()
-    game:GetService('Workspace').Game.Props.Roadblock:Destroy()
-    game:GetService('Workspace').Game.Props.Bollard:Destroy()
-    game:GetService('Workspace').Game.Props.Light:Destroy()
-    game:GetService('Workspace').Game.Props.Roadblock:Destroy()
-    game:GetService('Workspace').Game.Props.Glass:Destroy()
-    game:GetService('Workspace').Game.Props.Bench:Destroy()
-    game:GetService('Workspace').Game.Props["Trash Bin"]:Destroy()
-    game:GetService('Workspace').Game.Props.Bollard:Destroy()
-    game:GetService('Workspace').Game.Props["Office Chair"]:Destroy()
-    game:GetService('Workspace').Game.Props.Table:Destroy()
-    game:GetService("Workspace").BankRobbery.BankWalls:Destroy()
-    game:GetService("Workspace").BankRobbery.AlarmLightModel:Destroy()
-    game:GetService("Workspace").BankRobbery.AlarmLights:Destroy()
-    end
-})
-
-Tab:AddButton({
-    Name = '无皮肤枪械，无后，微射，连发',
-    Callback = function()
-    while true do
-    wait(1)
-    if game.ReplicatedStorage.Models.Items:FindFirstChild('Raygun') then
-    if  game.ReplicatedStorage.Models.Items.Raygun.Handle.Muzzle:FindFirstChild('PointLight') then
-        game.ReplicatedStorage.Models.Items.Raygun.Handle.Muzzle.PointLight.Name = 'PointLight1'
-    end
-    end
-    if game.ReplicatedStorage.Models.Items:FindFirstChild('M1911') then
-        if  game.ReplicatedStorage.Models.Items.M1911.Handle.Muzzle:FindFirstChild('PointLight') then
-            game.ReplicatedStorage.Models.Items.M1911.Handle.Muzzle.PointLight.Name = 'PointLight1'
-        end
-    end
-    if game.ReplicatedStorage.Models.Items:FindFirstChild('Scar L') then
-        if  game.ReplicatedStorage.Models.Items['Scar L'].Handle.Muzzle:FindFirstChild('PointLight') then
-            game.ReplicatedStorage.Models.Items['Scar L'].Handle.Muzzle.PointLight.Name = 'PointLight1'
-        end
-    end
-    if game.ReplicatedStorage.Models.Items:FindFirstChild('Glock') then
-        if  game.ReplicatedStorage.Models.Items.Glock.Handle.Muzzle:FindFirstChild('PointLight') then
-        game.ReplicatedStorage.Models.Items.Glock.Handle.Muzzle.PointLight.Name = 'PointLight1'
-        end
-    end
-    if game.ReplicatedStorage.Models.Items:FindFirstChild('Mossberg') then
-        if  game.ReplicatedStorage.Models.Items.Mossberg.Handle.Muzzle:FindFirstChild('PointLight') then
-            game.ReplicatedStorage.Models.Items.Mossberg.Handle.Muzzle.PointLight.Name = 'PointLight1'
-        end
-    end
-    if game.ReplicatedStorage.Models.Items:FindFirstChild('RPG') then
-        if  game.ReplicatedStorage.Models.Items.RPG.Handle.Muzzle:FindFirstChild('PointLight') then
-            game.ReplicatedStorage.Models.Items.RPG.Handle.Muzzle.PointLight.Name = 'PointLight1'
-        end
-    end
-    if game.ReplicatedStorage.Models.Items:FindFirstChild('USP 45') then
-        if  game.ReplicatedStorage.Models.Items['USP 45'].Handle.Muzzle:FindFirstChild('PointLight') then
-            game.ReplicatedStorage.Models.Items['USP 45'].Handle.Muzzle.PointLight.Name = 'PointLight1'
-        end
-    end
-    if game.ReplicatedStorage.Models.Items:FindFirstChild('Sawn Off') then
-        if  game.ReplicatedStorage.Models.Items['Sawn Off'].Handle.Muzzle:FindFirstChild('PointLight') then
-            game.ReplicatedStorage.Models.Items['Sawn Off'].Handle.Muzzle.PointLight.Name = 'PointLight1'
-        end
-    end
-    if game.ReplicatedStorage.Models.Items:FindFirstChild('Minigun') then
-        if  game.ReplicatedStorage.Models.Items.Minigun.Handle.Muzzle:FindFirstChild('PointLight') then
-            game.ReplicatedStorage.Models.Items.Minigun.Handle.Muzzle.PointLight.Name = 'PointLight1'
-        end
-    end
-    if game.ReplicatedStorage.Models.Items:FindFirstChild('Stagecoach') then
-        if  game.ReplicatedStorage.Models.Items.Stagecoach.Handle.Muzzle:FindFirstChild('PointLight') then
-            game.ReplicatedStorage.Models.Items.Stagecoach.Handle.Muzzle.PointLight.Name = 'PointLight1'
-        end
-    end
-    if game.ReplicatedStorage.Models.Items:FindFirstChild('Deagle') then
-        if  game.ReplicatedStorage.Models.Items.Deagle.Handle.Muzzle:FindFirstChild('PointLight') then
-            game.ReplicatedStorage.Models.Items.Deagle.Handle.Muzzle.PointLight.Name = 'PointLight1'
-        end
-    end
-    if game.ReplicatedStorage.Models.Items:FindFirstChild('RPK') then
-        if  game.ReplicatedStorage.Models.Items.RPK.Handle.Muzzle:FindFirstChild('PointLight') then
-            game.ReplicatedStorage.Models.Items.RPK.Handle.Muzzle.PointLight.Name = 'PointLight1'
-        end
-    end
-    if game.ReplicatedStorage.Models.Items:FindFirstChild('Glock 18') then
-        if  game.ReplicatedStorage.Models.Items['Glock 18'].Handle.Muzzle:FindFirstChild('PointLight') then
-            game.ReplicatedStorage.Models.Items['Glock 18'].Handle.Muzzle.PointLight.Name = 'PointLight1'
-        end
-    end
-    if game.ReplicatedStorage.Models.Items:FindFirstChild('AK-47') then
-        if  game.ReplicatedStorage.Models.Items['AK-47'].Handle.Muzzle:FindFirstChild('PointLight') then
-            game.ReplicatedStorage.Models.Items['AK-47'].Handle.Muzzle.PointLight.Name = 'PointLight1'
-        end
-    end
-    if game.ReplicatedStorage.Models.Items:FindFirstChild('Tommy Gun') then
-        if  game.ReplicatedStorage.Models.Items['Tommy Gun'].Handle.Muzzle:FindFirstChild('PointLight') then
-            game.ReplicatedStorage.Models.Items['Tommy Gun'].Handle.Muzzle.PointLight.Name = 'PointLight1'
-        end
-    end
-    if game.ReplicatedStorage.Models.Items:FindFirstChild('M4A1') then
-        if  game.ReplicatedStorage.Models.Items.M4A1.Handle.Muzzle:FindFirstChild('PointLight') then
-            game.ReplicatedStorage.Models.Items.M4A1.Handle.Muzzle.PointLight.Name = 'PointLight1'
-        end
-    end
-    if game.ReplicatedStorage.Models.Items:FindFirstChild('Uzi') then
-        if  game.ReplicatedStorage.Models.Items.Uzi.Handle.Muzzle:FindFirstChild('PointLight') then
-            game.ReplicatedStorage.Models.Items.Uzi.Handle.Muzzle.PointLight.Name = 'PointLight1'
-        end
-    end
-    if game.ReplicatedStorage.Models.Items:FindFirstChild('MP7') then
-        if  game.ReplicatedStorage.Models.Items.MP7.Handle.Muzzle:FindFirstChild('PointLight') then
-        game.ReplicatedStorage.Models.Items.MP7.Handle.Muzzle.PointLight.Name = 'PointLight1'
-        end
-    end
-    if game.ReplicatedStorage.Models.Items:FindFirstChild('AUG') then
-        if  game.ReplicatedStorage.Models.Items.AUG.Handle.Muzzle:FindFirstChild('PointLight') then
-        game.ReplicatedStorage.Models.Items.AUG.Handle.Muzzle.PointLight.Name = 'PointLight1'
-        end
-    end
-    if game.ReplicatedStorage.Models.Items:FindFirstChild('Python') then
-        if  game.ReplicatedStorage.Models.Items.Python.Handle.Muzzle:FindFirstChild('PointLight') then
-            game.ReplicatedStorage.Models.Items.Python.Handle.Muzzle.PointLight.Name = 'PointLight1'
-        end
-    end
-    end
-    end    
-})
-
-local Tab = Window:MakeTab({
-        Name = "传送",
-        Icon = "rbxassetid://7734068321",
-        PremiumOnly = false
-})
-
-Tab:AddButton({
-    Name = '银行',
-    Callback = function()
-        local og1 = CFrame.new(1055.94153, 15.11950874, -344.58374)
-        local og3 = game:GetService('Players').LocalPlayer.Character.HumanoidRootPart
-        og3.CFrame = og1
-    end
-})
-
-Tab:AddButton({
-    Name = '珠宝店',
-    Callback = function()
-        local og1 = CFrame.new(1719.02637, 14.2831011, -714.293091)
-        local og3 = game:GetService('Players').LocalPlayer.Character.HumanoidRootPart
-        og3.CFrame = og1
-    end
-})
-
-Tab:AddButton({
-    Name = '沙滩',
-    Callback = function()
-        local og1 = CFrame.new(998.4656372070312, 15, 395.9789733886719)
-        local og3 = game:GetService('Players').LocalPlayer.Character.HumanoidRootPart
-        og3.CFrame = og1
-    end
-})
-
-Tab:AddButton({
-    Name = '武器店',
-    Callback = function()
-        local og1 = CFrame.new(660.5284423828125, 6.4081127643585205, -716.489990234375)
-        local og3 = game:GetService('Players').LocalPlayer.Character.HumanoidRootPart
-        og3.CFrame = og1
-    end
-})
-
-Tab:AddButton({
-    Name = '武士刀',
-    Callback = function()
-        local og1 = CFrame.new(175.191, 13.937, -132.69)
-        local og3 = game:GetService('Players').LocalPlayer.Character.HumanoidRootPart
-        og3.CFrame = og1
-    end
-})
-
-Tab:AddButton({
-    Name = '射线枪',
-    Callback = function()
-        local og1 = CFrame.new(148.685471, -90, -529.280945)
-        local og3 = game:GetService('Players').LocalPlayer.Character.HumanoidRootPart
-        og3.CFrame = og1
-    end
-})
-
-Tab:AddButton({
-    Name = '加特林',
-    Callback = function()
-        local og1 = CFrame.new(364.97076416015625, 0.764974117279053, -1447.3302001953125)
-        local og3 = game:GetService('Players').LocalPlayer.Character.HumanoidRootPart
-        og3.CFrame = og1
-    end
-})
-
-Tab:AddButton({
-    Name = '锯掉',
-    Callback = function()
-        local og1 = CFrame.new(1179.98523,40,-436.812683)
-        local og3 = game:GetService('Players').LocalPlayer.Character.HumanoidRootPart
-        og3.CFrame = og1
-    end
-})
-
-Tab:AddButton({
-    Name = '沙漠之鹰',
-    Callback = function()
-        local og1 = CFrame.new(363.341461, 26.0798492, -259.681396)
-        local og3 = game:GetService('Players').LocalPlayer.Character.HumanoidRootPart
-        og3.CFrame = og1
-    end
-})
-
-Tab:AddButton({
-    Name = '警察局',
-    Callback = function()
-        local og1 = CFrame.new(603.4676513671875,25.662811279296875,-922.0442504882812)
-        local og3 = game:GetService('Players').LocalPlayer.Character.HumanoidRootPart
-        og3.CFrame = og1
-    end
-})
-
-Tab:AddButton({
-    Name = 'A∪G',
-    Callback = function()
-        local og1 = CFrame.new(1170.500244140625,48.37138366699219,-772.55859375)
-        local og3 = game:GetService('Players').LocalPlayer.Character.HumanoidRootPart
-        og3.CFrame = og1
-    end
-})
-
-Tab:AddButton({
-    Name = '军事基地',
-    Callback = function()
-        local og1 = CFrame.new(563.4422607421875,28.502071380615234,-1472.780517578125)
-        local og3 = game:GetService('Players').LocalPlayer.Character.HumanoidRootPart
-        og3.CFrame = og1
-    end
-})
+return Lib, Utility
