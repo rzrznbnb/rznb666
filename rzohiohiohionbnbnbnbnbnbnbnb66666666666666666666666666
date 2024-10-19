@@ -256,6 +256,74 @@ paolu2 = function()
 end
 
 Tab:AddToggle({
+    Name = '掉血即逃跑',
+    Value = false,
+    Callback = function(Value)
+States.KillAura = state
+        if state then
+            print("Kill Aura On")
+            CreateKillPart()
+        else
+            print("Kill Aura Off")
+            if Parts[1] and Parts[1].Name == "KillAura" then
+                Parts[1]:Destroy()
+                Parts[1] = nil
+            end
+         end
+        end)
+        
+        function CreateKillPart()
+            if Parts[1] then
+             pcall(function()
+                 Parts[1]:Destroy()
+             end)
+             Parts[1] = nil
+        end
+        local Part = Instance.new("Part",plr.Character)
+        local hilight = Instance.new("Highlight",Part)
+        hilight.FillTransparency = 1
+    
+        Part.Anchored = true
+        Part.CanCollide = false
+        Part.CanTouch = false
+        Part.Material = Enum.Material.SmoothPlastic
+        Part.Transparency = .98
+        Part.Material = Enum.Material.SmoothPlastic
+        Part.BrickColor = BrickColor.White()
+        Part.Size = Vector3.new(20,2,20)
+        Part.Name = "KillAura"
+        Parts[1] = Part
+        end
+    
+        task.spawn(function()
+        repeat task.wait()until plr.Character and char and char:FindFirstChildOfClass("Humanoid")
+    
+        if States.KillAura then
+            CreateKillPart()
+        end
+      end)
+      
+    game:GetService("RunService").Stepped:Connect(function()
+        if States.KillAura then
+            for i,v in pairs(game.Players:GetPlayers()) do
+                if v ~= game.Players.LocalPlayer then
+                    if (v.Character.HumanoidRootPart.Position - plr.Character.HumanoidRootPart.Position).magnitude <14 and v.Character.Humanoid.Health >0 then
+                        local args = {
+                            [1] = v
+                        }
+                        for i =1,2 do
+                            task.spawn(function()
+                                game:GetService("ReplicatedStorage").meleeEvent:FireServer(unpack(args))
+                            end)
+                        end
+    
+                    end
+                end
+            end
+        end  
+     end)
+
+Tab:AddToggle({
     Name = '半血逃跑',
     Value = false,
     Callback = function(Value)
