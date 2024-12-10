@@ -1834,6 +1834,40 @@
         end
         end)
         
+local autoPresent = makeutilbutton("自动捡大礼物盒")
+        local autoPresentt = false
+        autoPresent.MouseButton1Click:Connect(function()
+            if autoPresentt == false then
+                autoPresentt = true
+                autoPresent.Text = "自动捡大礼物盒(开)"
+            else
+                autoPresentt = false
+                autoPresent.Text = "自动捡大礼物盒"
+            end
+            while autoPresentt == true do
+        	wait(0.1)
+            local epoh2 = game:GetService("Players")
+            local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
+            for i,l in pairs(game:GetService("Workspace").Game.Entities.ItemPickup:GetChildren()) do
+                for i,v in pairs(l:GetChildren()) do
+                    if v.ClassName == "MeshPart" or "Part" then
+                        for i,e in pairs(v:GetChildren()) do
+                            if e.ClassName == "ProximityPrompt" then
+                                if e.ObjectText == "Large Present" then
+                                    local epoh1 = v.CFrame
+                                    epoh3.CFrame = epoh1 * CFrame.new(0, 2, 0)
+                                    wait(0.1)
+                                    e:InputHoldBegin()
+                                    e:InputHoldEnd()
+                                end
+                            end
+                        end       
+                    end
+                end
+            end
+        end
+        end)
+        
         local autoredcrad = makeutilbutton("自动捡红卡")
         local autoredcradt = false
         autoredcrad.MouseButton1Click:Connect(function()
@@ -1887,7 +1921,7 @@
                     if v.ClassName == "MeshPart" or "Part" then
                         for i,e in pairs(v:GetChildren()) do
                             if e.ClassName == "ProximityPrompt" then
-                                if e.ObjectText == "Bunny Balloon" or e.ObjectText == "Ghost Balloon" or e.ObjectText == "Clover Balloon" then
+                                if e.ObjectText == "Bunny Balloon" or e.ObjectText == "Ghost Balloon" or e.ObjectText == "Clover Balloon" or e.ObjectText == "bat Balloon" then
                                     local epoh1 = v.CFrame
                                     epoh3.CFrame = epoh1 * CFrame.new(0, 2, 0)
                                     wait(0.1)
@@ -1921,7 +1955,7 @@
                     if v.ClassName == "MeshPart" or "Part" then
                         for i,e in pairs(v:GetChildren()) do
                             if e.ClassName == "ProximityPrompt" then
-                                if e.ObjectText == "Bunny Balloon" or e.ObjectText == "Ghost Balloon" or e.ObjectText == "Clover Balloon" then
+                                if e.ObjectText == "Candy Cane" or e.ObjectText == "Blue Candy Cane" then
                                     local epoh1 = v.CFrame
                                     epoh3.CFrame = epoh1 * CFrame.new(0, 2, 0)
                                     wait(0.1)
@@ -2458,7 +2492,7 @@
         					if gta then
         						gta.ClickablePrompt = true
         						gta.MaxActivationDistance = 35
-        						gta.RequiresLineOfSight = false
+        						gta.RequiresLineOfSight = falsesss
         						gta.HoldDuration = 0
         						gta.ActionText = "ez"
         						local leaderstats = Instance.new("IntValue")
