@@ -1766,6 +1766,108 @@
         end
         end)
         
+ local autoairdrop123 = makeutilbutton("自动捡圣诞空投标记")
+        local autoairdrop123t = false
+        autoairdrop123.MouseButton1Click:Connect(function()
+            if autoairdrop123t == false then
+                autoairdrop123t = true
+                autoairdrop123.Text = "自动捡圣诞空投开"
+            else
+                autoairdrop123t = false
+                autoairdrop123.Text = "自动捡圣诞空投标记"
+            end
+            while autoairdrop123t == true do
+        	wait(0.1)
+            local epoh2 = game:GetService("Players")
+            local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
+            for i,l in pairs(game:GetService("Workspace").Game.Entities.ItemPickup:GetChildren()) do
+                for i,v in pairs(l:GetChildren()) do
+                    if v.ClassName == "MeshPart" or "Part" then
+                        for i,e in pairs(v:GetChildren()) do
+                            if e.ClassName == "ProximityPrompt" then
+                                if e.ObjectText == "Santa Signal" then
+                                    local epoh1 = v.CFrame
+                                    epoh3.CFrame = epoh1 * CFrame.new(0, 2, 0)
+                                    wait(0.1)
+                                    e:InputHoldBegin()
+                                    e:InputHoldEnd()
+                                end
+                            end
+                        end       
+                    end
+                end
+            end
+        end
+        end)
+
+ local autoairdrop123 = makeutilbutton("自动捡野马")
+        local autoairdrop123t = false
+        autoairdrop123.MouseButton1Click:Connect(function()
+            if autoairdrop123t == false then
+                autoairdrop123t = true
+                autoairdrop123.Text = "自动捡野马开"
+            else
+                autoairdrop123t = false
+                autoairdrop123.Text = "自动捡野马"
+            end
+            while autoairdrop123t == true do
+        	wait(0.1)
+            local epoh2 = game:GetService("Players")
+            local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
+            for i,l in pairs(game:GetService("Workspace").Game.Entities.ItemPickup:GetChildren()) do
+                for i,v in pairs(l:GetChildren()) do
+                    if v.ClassName == "MeshPart" or "Part" then
+                        for i,e in pairs(v:GetChildren()) do
+                            if e.ClassName == "ProximityPrompt" then
+                                if e.ObjectText == "Mustang Key" then
+                                    local epoh1 = v.CFrame
+                                    epoh3.CFrame = epoh1 * CFrame.new(0, 2, 0)
+                                    wait(0.1)
+                                    e:InputHoldBegin()
+                                    e:InputHoldEnd()
+                                end
+                            end
+                        end       
+                    end
+                end
+            end
+        end
+        end)
+ 
+ local autoairdrop123 = makeutilbutton("自动捡飞机钥匙")
+        local autoairdrop123t = false
+        autoairdrop123.MouseButton1Click:Connect(function()
+            if autoairdrop123t == false then
+                autoairdrop123t = true
+                autoairdrop123.Text = "自动捡飞机钥匙开"
+            else
+                autoairdrop123t = false
+                autoairdrop123.Text = "自动捡飞机钥匙"
+            end
+            while autoairdrop123t == true do
+        	wait(0.1)
+            local epoh2 = game:GetService("Players")
+            local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
+            for i,l in pairs(game:GetService("Workspace").Game.Entities.ItemPickup:GetChildren()) do
+                for i,v in pairs(l:GetChildren()) do
+                    if v.ClassName == "MeshPart" or "Part" then
+                        for i,e in pairs(v:GetChildren()) do
+                            if e.ClassName == "ProximityPrompt" then
+                                if e.ObjectText == "Helicopter Key" then
+                                    local epoh1 = v.CFrame
+                                    epoh3.CFrame = epoh1 * CFrame.new(0, 2, 0)
+                                    wait(0.1)
+                                    e:InputHoldBegin()
+                                    e:InputHoldEnd()
+                                end
+                            end
+                        end       
+                    end
+                end
+            end
+        end
+        end)
+
         local autoairdrop1231 = makeutilbutton("自动捡精致零件")
         local autoairdrop1231t = false
         autoairdrop1231.MouseButton1Click:Connect(function()
@@ -1902,6 +2004,40 @@ local autoPresent = makeutilbutton("自动捡大礼物盒")
         end
         end)
         
+  local autoredcrad = makeutilbutton("自动捡蓝卡")
+        local autoredcradt = false
+        autoredcrad.MouseButton1Click:Connect(function()
+            if autoredcradt == false then
+                autoredcradt = true
+                autoredcrad.Text = "自动捡蓝卡(开)"
+            else
+                autoredcradt = false
+                autoredcrad.Text = "自动捡蓝卡"
+            end
+            while autoredcradt == true do
+        	wait(0.1)
+            local epoh2 = game:GetService("Players")
+            local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
+            for i,l in pairs(game:GetService("Workspace").Game.Entities.ItemPickup:GetChildren()) do
+                for i,v in pairs(l:GetChildren()) do
+                    if v.ClassName == "MeshPart" or "Part" then
+                        for i,e in pairs(v:GetChildren()) do
+                            if e.ClassName == "ProximityPrompt" then
+                                if e.ObjectText == "police Armory Keycard" then
+                                    local epoh1 = v.CFrame
+                                    epoh3.CFrame = epoh1 * CFrame.new(0, 2, 0)
+                                    wait(0.1)
+                                    e:InputHoldBegin()
+                                    e:InputHoldEnd()
+                                end
+                            end
+                        end       
+                    end
+                end
+            end
+        end
+        end)
+
         local autopickballoon = makeutilbutton("自动捡气球")
         local autopickballoont = false
         autopickballoon.MouseButton1Click:Connect(function()
@@ -1921,7 +2057,7 @@ local autoPresent = makeutilbutton("自动捡大礼物盒")
                     if v.ClassName == "MeshPart" or "Part" then
                         for i,e in pairs(v:GetChildren()) do
                             if e.ClassName == "ProximityPrompt" then
-                                if e.ObjectText == "Bunny Balloon" or e.ObjectText == "Ghost Balloon" or e.ObjectText == "Clover Balloon" or e.ObjectText == "bat Balloon" then
+                                if e.ObjectText == "Bunny Balloon" or e.ObjectText == "Ghost Balloon" or e.ObjectText == "Clover Balloon" or e.ObjectText == "Bat Balloon"  or e.ObjectText == "Heart Balloon" then
                                     local epoh1 = v.CFrame
                                     epoh3.CFrame = epoh1 * CFrame.new(0, 2, 0)
                                     wait(0.1)
