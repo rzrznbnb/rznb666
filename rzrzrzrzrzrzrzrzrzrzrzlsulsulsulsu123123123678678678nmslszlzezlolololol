@@ -1765,41 +1765,7 @@
             end
         end
         end)
-
-         local autoairdrop123 = makeutilbutton("自动捡圣诞空投标记")
-        local autoairdrop123t = false
-        autoairdrop123.MouseButton1Click:Connect(function()
-            if autoairdrop123t == false then
-                autoairdrop123t = true
-                autoairdrop123.Text = "自动捡圣诞空投标记(开)"
-            else
-                autoairdrop123t = false
-                autoairdrop123.Text = "自动捡圣诞空投标记"
-            end
-            while autoairdrop123t == true do
-        	wait(0.1)
-            local epoh2 = game:GetService("Players")
-            local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
-            for i,l in pairs(game:GetService("Workspace").Game.Entities.ItemPickup:GetChildren()) do
-                for i,v in pairs(l:GetChildren()) do
-                    if v.ClassName == "MeshPart" or "Part" then
-                        for i,e in pairs(v:GetChildren()) do
-                            if e.ClassName == "ProximityPrompt" then
-                                if e.ObjectText == "Santa Signal" then
-                                    local epoh1 = v.CFrame
-                                    epoh3.CFrame = epoh1 * CFrame.new(0, 2, 0)
-                                    wait(0.1)
-                                    e:InputHoldBegin()
-                                    e:InputHoldEnd()
-                                end
-                            end
-                        end       
-                    end
-                end
-            end
-        end
-        end)
-
+        
         local autoairdrop1231 = makeutilbutton("自动捡精致零件")
         local autoairdrop1231t = false
         autoairdrop1231.MouseButton1Click:Connect(function()
@@ -1955,7 +1921,7 @@ local autoPresent = makeutilbutton("自动捡大礼物盒")
                     if v.ClassName == "MeshPart" or "Part" then
                         for i,e in pairs(v:GetChildren()) do
                             if e.ClassName == "ProximityPrompt" then
-                                if e.ObjectText == "Bunny Balloon" or e.ObjectText == "Ghost Balloon" or e.ObjectText == "Clover Balloon" or e.ObjectText == "Bat Balloon" or e.ObjectText == "Heart Balloon" then
+                                if e.ObjectText == "Bunny Balloon" or e.ObjectText == "Ghost Balloon" or e.ObjectText == "Clover Balloon" or e.ObjectText == "bat Balloon" then
                                     local epoh1 = v.CFrame
                                     epoh3.CFrame = epoh1 * CFrame.new(0, 2, 0)
                                     wait(0.1)
@@ -2313,17 +2279,17 @@ local autoPresent = makeutilbutton("自动捡大礼物盒")
         game:GetService("Players").LocalPlayer.PlayerGui.Money.Container.premium.Shadow.Visible = false
         game:GetService("Players").LocalPlayer.PlayerGui.Money.Container["2x cash"].Shadow.Visible = false
         game:GetService("Players").LocalPlayer.PlayerGui.Money.Container.premium.Visible = true
-        game:GetService("Players").LocalPlayer.PlayerGui.Money.Container.premium.TextLabel.Text = "FDP User"
+        game:GetService("Players").LocalPlayer.PlayerGui.Money.Container.premium.TextLabel.Text = "rz User"
         game:GetService("Players").LocalPlayer.PlayerGui.Money.Container["2x cash"].Visible = true
-        game:GetService("Players").LocalPlayer.PlayerGui.Money.Container["2x cash"].TextLabel.Text = "FDP By Smk"
+        game:GetService("Players").LocalPlayer.PlayerGui.Money.Container["2x cash"].TextLabel.Text = "rz By rz"
         game:GetService("Workspace").BlackMarket.Dealer.Dealer.ProximityPrompt.HoldDuration = 0
         game:GetService("Workspace").BlackMarket.BlackMarketBillboard.TopLabel.Text = "黑市"
         game:GetService("Workspace").BlackMarket.BlackMarketBillboard.BottomLabel.Text = "rz出售物品"
-        game:GetService("Workspace").OhioSign.Screen.SurfaceGui.Frame.Population.Text = "FDP User"
+        game:GetService("Workspace").OhioSign.Screen.SurfaceGui.Frame.Population.Text = "rz User"
         
         local Teams = game:GetService("Teams")
         local newTeam = Instance.new("Team")
-        newTeam.Name = "FDP User"
+        newTeam.Name = "rz User"
         newTeam.Parent = Teams
         local player = game:GetService("Players").LocalPlayer
         player.Team = newTeam
