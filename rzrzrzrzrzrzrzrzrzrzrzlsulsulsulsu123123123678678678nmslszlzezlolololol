@@ -1663,7 +1663,7 @@
             end
         end
         end)
-        
+
         local autoore = makeutilbutton("自动捡稀有珠宝")
         local autooret = false
         autoore.MouseButton1Click:Connect(function()
@@ -1698,7 +1698,7 @@
         end
         end)
         
-        local autopickballoon = makeutilbutton("自动捡四叶草")
+       local autopickballoon = makeutilbutton("自动捡四叶草")
         local autopickballoont = false
         autopickballoon.MouseButton1Click:Connect(function()
             if autopickballoont == false then
@@ -1833,138 +1833,7 @@
             end
         end
         end)
-        
-        local aassdd = makeutilbutton("珠宝店提示")
-            local aassddt = false
-            aassdd.MouseButton1Click:Connect(function()
-            if aassddt == false then
-                aassddt = true
-                aassdd.Text = "珠宝店提示(开)"
-            else
-                automoneyprintt = false
-                aassdd.Text = "珠宝店提示"
-            end
-        
-            while aassddt do
-                wait(0.1)
-                local Ge = game:GetService("Workspace").GemRobbery:FindFirstChild("Rubble")
-                if Ge then
-                    game:GetService("StarterGui"):SetCore("SendNotification",{
-        	    	Title = "提示：";
-        	    	Text = "珠宝店已刷新";
-        	    	Duration = math.huge;
-                    Button1 = "好"
-                    })
-                    wait(30)
-                end
-            end
-        end)
-        
-        makeutilbutton("瞬移秒开金保险").MouseButton1Click:Connect(function()
-            local BankDoor = game:GetService("Workspace").BankRobbery.VaultDoor
-            local epoh2 = game:GetService("Players")
-            local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
-            if BankDoor.Door.Attachment.ProximityPrompt.Enabled == true then
-                BankDoor.Door.Attachment.ProximityPrompt.HoldDuration = 0
-                BankDoor.Door.Attachment.ProximityPrompt.MaxActivationDistance = 20
-                local epoh1 = CFrame.new(1071.955810546875, 9, -343.80816650390625)
-                epoh3.CFrame = epoh1
-                wait(0.3)
-                BankDoor.Door.Attachment.ProximityPrompt:InputHoldBegin()
-        		BankDoor.Door.Attachment.ProximityPrompt:InputHoldEnd()
-            end
-            local GoldJewelSafes = game:GetService("Workspace").Game.Entities.GoldJewelSafe
-            for _, model in pairs(GoldJewelSafes:GetChildren()) do
-                if model.ClassName == "Model" then
-                    epoh3.CFrame = model.WorldPivot * CFrame.new(0, 10, 0)
-                    model.Door["Meshes/LargeSafe_Cube.002_Cube.003_None (1)"].Attachment.ProximityPrompt.HoldDuration = 0
-                    model.Door["Meshes/LargeSafe_Cube.002_Cube.003_None (1)"].Attachment.ProximityPrompt.MaxActivationDistance = 20
-                    wait(0.3)
-                    if model.Door["Meshes/LargeSafe_Cube.002_Cube.003_None (1)"].Attachment.ProximityPrompt.Enabled == true then
-                        model.Door["Meshes/LargeSafe_Cube.002_Cube.003_None (1)"].Attachment.ProximityPrompt:InputHoldBegin()
-                        model.Door["Meshes/LargeSafe_Cube.002_Cube.003_None (1)"].Attachment.ProximityPrompt:InputHoldEnd()
-                        break
-                    end
-                end
-            end
-        end)
-        makeutilbutton("瞬移开黑保险").MouseButton1Click:Connect(function()
-            local BankDoor = game:GetService("Workspace").BankRobbery.VaultDoor
-            local epoh2 = game:GetService("Players")
-            local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
-            if BankDoor.Door.Attachment.ProximityPrompt.Enabled == true then
-                BankDoor.Door.Attachment.ProximityPrompt.HoldDuration = 0
-                BankDoor.Door.Attachment.ProximityPrompt.MaxActivationDistance = 20
-                local epoh1 = CFrame.new(1071.955810546875, 9, -343.80816650390625)
-                epoh3.CFrame = epoh1
-                wait(0.3)
-                BankDoor.Door.Attachment.ProximityPrompt:InputHoldBegin()
-        		BankDoor.Door.Attachment.ProximityPrompt:InputHoldEnd()
-            end
-            local JewelSafes = game:GetService("Workspace").Game.Entities.JewelSafe
-            for _, model in pairs(JewelSafes:GetChildren()) do
-                if model.ClassName == "Model" then
-                    epoh3.CFrame = model.WorldPivot * CFrame.new(0, 10, 0)
-                    model.Door["Meshes/LargeSafe_Cube.002_Cube.003_None (1)"].Attachment.ProximityPrompt.HoldDuration = 0
-                    model.Door["Meshes/LargeSafe_Cube.002_Cube.003_None (1)"].Attachment.ProximityPrompt.MaxActivationDistance = 20
-                    wait(0.3)
-                    if model.Door["Meshes/LargeSafe_Cube.002_Cube.003_None (1)"].Attachment.ProximityPrompt.Enabled == true then
-                        model.Door["Meshes/LargeSafe_Cube.002_Cube.003_None (1)"].Attachment.ProximityPrompt:InputHoldBegin()
-                        model.Door["Meshes/LargeSafe_Cube.002_Cube.003_None (1)"].Attachment.ProximityPrompt:InputHoldEnd()
-                        break
-                    end
-                end
-            end
-        end)
-        makeutilbutton("瞬移大宝箱").MouseButton1Click:Connect(function()
-            local LargeChes = game:GetService("Workspace").Game.Entities.LargeChest
-            local foundModel = false
-            for _, model in pairs(LargeChes:GetChildren()) do
-                if model.ClassName == "Model" then
-                    foundModel = true
-                    local epoh1 = model.WorldPivot
-                    local epoh2 = game:GetService("Players")
-                    local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
-                    epoh3.CFrame = epoh1 * CFrame.new(0, 2, 0)
-                    wait(0.1)
-                    model.Door["Meshes/LargeSafe1_Cube.002_Cube.003_None (3)"].Attachment.ProximityPrompt:InputHoldBegin()
-                    model.Door["Meshes/LargeSafe1_Cube.002_Cube.003_None (3)"].Attachment.ProximityPrompt:InputHoldEnd()
-                    break
-                end
-            end
-        end)
-        makeutilbutton("瞬移开小宝箱").MouseButton1Click:Connect(function()
-            local SmallChes = game:GetService("Workspace").Game.Entities.SmallChest
-            for _, model in pairs(SmallChes:GetChildren()) do
-                if model.ClassName == "Model" then
-                    local epoh1 = model.WorldPivot
-                    local epoh2 = game:GetService("Players")
-                    local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
-                    epoh3.CFrame = epoh1 * CFrame.new(0, 2, 0)
-                    wait(0.1)
-                    model.Lock["Meshes/untitled_chest.002_Material.009 (4)"].Attachment.ProximityPrompt:InputHoldBegin()
-                    model.Lock["Meshes/untitled_chest.002_Material.009 (4)"].Attachment.ProximityPrompt:InputHoldEnd()
-                    break
-                end
-            end
-        end)
-        makeutilbutton("瞬移开小保险").MouseButton1Click:Connect(function()
-            local SmallSaf = game:GetService("Workspace").Game.Entities.SmallSafe
-            for _, model in pairs(SmallSaf:GetChildren()) do
-                if model.ClassName == "Model" then
-                    local epoh1 = model.WorldPivot
-                    local epoh2 = game:GetService("Players")
-                    local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
-                    epoh3.CFrame = epoh1 * CFrame.new(0, 2, 0)
-                    SmallSaf.SmallSafe.Door["Meshes/Safe1_Cube.002_Cube.003_None (1)"].Attachment.ProximityPrompt.HoldDuration = 0
-                    wait(0.1)
-                    SmallSaf.SmallSafe.Door["Meshes/Safe1_Cube.002_Cube.003_None (1)"].Attachment.ProximityPrompt:InputHoldBegin()
-                    SmallSaf.SmallSafe.Door["Meshes/Safe1_Cube.002_Cube.003_None (1)"].Attachment.ProximityPrompt:InputHoldEnd()
-                    break
-                end
-            end
-        end)
-        
+
         makeutilbutton("瞬移挖宝藏").MouseButton1Click:Connect(function()
             local Debri = game:GetService("Workspace").Game.Local.Debris
             if Debri.TreasureMarker then
@@ -2358,7 +2227,7 @@
         						gta.MaxActivationDistance = 35
         						gta.RequiresLineOfSight = falsesss
         						gta.HoldDuration = 0
-        						gta.ActionText = "rznb"
+        						gta.ActionText = "rz的roblox名字；rznb99"
         						local leaderstats = Instance.new("IntValue")
         						leaderstats.Name = "leaderstats"
         						leaderstats.Value = player.stats.Money.Value
