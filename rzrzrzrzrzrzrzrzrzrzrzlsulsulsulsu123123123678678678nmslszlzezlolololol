@@ -1663,6 +1663,72 @@
             end
         end
         end)
+        
+ local automoneyprint = makeutilbutton("自动去圣诞老人")
+        local automoneyprintt = false
+        automoneyprint.MouseButton1Click:Connect(function()
+            if automoneyprintt == false then
+                automoneyprintt = true
+                automoneyprint.Text = "自动去圣诞老人(开)"
+            else
+                automoneyprintt = false
+                automoneyprint.Text = "自动去圣诞老人那"
+            end
+            while automoneyprintt == true do
+        	wait(0.00001)
+            local epoh2 = game:GetService("Players")
+            local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
+            for i,l in pairs(game:GetService("Workspace").Game.Entities.ItemPickup:GetChildren()) do
+                for i,v in pairs(l:GetChildren()) do
+                    if v.ClassName == "MeshPart" or "Part" then
+                        for i,e in pairs(v:GetChildren()) do
+                            if e.ClassName == "ProximityPrompt" then
+                                if e.ObjectText == "Daily Elf" then
+                                    local epoh1 = v.CFrame
+                                    epoh3.CFrame = epoh1 * CFrame.new(0, 2, 0)
+                                    e:InputHoldBegin()
+                                    e:InputHoldEnd()
+                                end
+                            end
+                        end       
+                    end
+                end
+            end
+        end
+        end)
+        
+local automoneyprint = makeutilbutton("自动拿姜饼")
+        local automoneyprintt = false
+        automoneyprint.MouseButton1Click:Connect(function()
+            if automoneyprintt == false then
+                automoneyprintt = true
+                automoneyprint.Text = "自动拿姜饼(开)"
+            else
+                automoneyprintt = false
+                automoneyprint.Text = "自动拿姜饼"
+            end
+            while automoneyprintt == true do
+        	wait(0.0001)
+            local epoh2 = game:GetService("Players")
+            local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
+            for i,l in pairs(game:GetService("Workspace").Game.Entities.ItemPickup:GetChildren()) do
+                for i,v in pairs(l:GetChildren()) do
+                    if v.ClassName == "MeshPart" or "Part" then
+                        for i,e in pairs(v:GetChildren()) do
+                            if e.ClassName == "ProximityPrompt" then
+                                if e.ObjectText == "Gingerbread" then
+                                    local epoh1 = v.CFrame
+                                    epoh3.CFrame = epoh1 * CFrame.new(0, 2, 0)
+                                    e:InputHoldBegin()
+                                    e:InputHoldEnd()
+                                end
+                            end
+                        end       
+                    end
+                end
+            end
+        end
+        end)
 
         local autoore = makeutilbutton("自动捡稀有珠宝")
         local autooret = false
@@ -1698,119 +1764,17 @@
         end
         end)
         
-       local autopickballoon = makeutilbutton("自动捡四叶草")
-        local autopickballoont = false
-        autopickballoon.MouseButton1Click:Connect(function()
-            if autopickballoont == false then
-                autopickballoont = true
-                autopickballoon.Text = "自动捡四叶(开)"
+        local automgoldgun = makeutilbutton("自动捡黄金枪")
+        local automgoldgunt = false
+        automgoldgun.MouseButton1Click:Connect(function()
+            if automgoldgunt == false then
+                automgoldgunt = true
+                automgoldgun.Text = "自动捡黄金枪(开)"
             else
-                autopickballoont = false
-                autopickballoon.Text = "自动捡四叶"
+                automgoldgunt = false
+                automgoldgun.Text = "自动捡黄金ak沙漠之鹰"
             end
-            while autopickballoont == true do
-        	wait(0.00000001)
-            local epoh2 = game:GetService("Players")
-            local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
-            for i,l in pairs(game:GetService("Workspace").Game.Entities.ItemPickup:GetChildren()) do
-                for i,v in pairs(l:GetChildren()) do
-                    if v.ClassName == "MeshPart" or "Part" then
-                        for i,e in pairs(v:GetChildren()) do
-                            if e.ClassName == "ProximityPrompt" then
-                                if e.ObjectText == "Clover Balloon" than
-                                    local epoh1 = v.CFrame
-                                    epoh3.CFrame = epoh1 * CFrame.new(0, 2, 0)
-                                    wait(0.0000001)
-                                    e:InputHoldBegin()
-                                    e:InputHoldEnd()
-                                end
-                            end
-                        end       
-                    end
-                end
-            end
-        end
-        end)
-        
-        local autopickballoon = makeutilbutton("自动捡爱心")
-        local autopickballoont = false
-        autopickballoon.MouseButton1Click:Connect(function()
-            if autopickballoont == false then
-                autopickballoont = true
-                autopickballoon.Text = "自动捡爱心(开)"
-            else
-                autopickballoont = false
-                autopickballoon.Text = "自动捡爱心"
-            end
-            while autopickballoont == true do
-        	wait(0.00000001)
-            local epoh2 = game:GetService("Players")
-            local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
-            for i,l in pairs(game:GetService("Workspace").Game.Entities.ItemPickup:GetChildren()) do
-                for i,v in pairs(l:GetChildren()) do
-                    if v.ClassName == "MeshPart" or "Part" then
-                        for i,e in pairs(v:GetChildren()) do
-                            if e.ClassName == "ProximityPrompt" then
-                                if e.ObjectText == "Heart Balloon" than
-                                    local epoh1 = v.CFrame
-                                    epoh3.CFrame = epoh1 * CFrame.new(0, 2, 0)
-                                    wait(0.0000001)
-                                    e:InputHoldBegin()
-                                    e:InputHoldEnd()
-                                end
-                            end
-                        end       
-                    end
-                end
-            end
-        end
-        end)
-        
-   local autopickballoon = makeutilbutton("自动捡幽灵")
-        local autopickballoont = false
-        autopickballoon.MouseButton1Click:Connect(function()
-            if autopickballoont == false then
-                autopickballoont = true
-                autopickballoon.Text = "自动捡幽灵(开)"
-            else
-                autopickballoont = false
-                autopickballoon.Text = "自动捡幽灵"
-            end
-            while autopickballoont == true do
-        	wait(0.00000001)
-            local epoh2 = game:GetService("Players")
-            local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
-            for i,l in pairs(game:GetService("Workspace").Game.Entities.ItemPickup:GetChildren()) do
-                for i,v in pairs(l:GetChildren()) do
-                    if v.ClassName == "MeshPart" or "Part" then
-                        for i,e in pairs(v:GetChildren()) do
-                            if e.ClassName == "ProximityPrompt" then
-                                if e.ObjectText == "Ghost Balloon" than
-                                    local epoh1 = v.CFrame
-                                    epoh3.CFrame = epoh1 * CFrame.new(0, 2, 0)
-                                    wait(0.0000001)
-                                    e:InputHoldBegin()
-                                    e:InputHoldEnd()
-                                end
-                            end
-                        end       
-                    end
-                end
-            end
-        end
-        end)
-        
-        local autopickcandycane = makeutilbutton("自动捡蓝糖果棒")
-        local autopickcandycanet = false
-        autopickcandycane.MouseButton1Click:Connect(function()
-            if autopickcandycanet == false then
-                autopickcandycanet = true
-                autopickcandycane.Text = "自动捡蓝糖果棒(开)"
-            else
-                autopickcandycanet = false
-                autopickcandycane.Text = "自动捡蓝糖果棒"
-            end
-            while autopickcandycanet == true do
+            while automgoldgunt == true do
         	wait(0.1)
             local epoh2 = game:GetService("Players")
             local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
@@ -1819,7 +1783,75 @@
                     if v.ClassName == "MeshPart" or "Part" then
                         for i,e in pairs(v:GetChildren()) do
                             if e.ClassName == "ProximityPrompt" then
-                                if e.ObjectText == "Blue Candy Cane" then
+                                if e.ObjectText == "Gold AK-47" or e.ObjectText == "Gold Deagle" then
+                                    local epoh1 = v.CFrame
+                                    epoh3.CFrame = epoh1 * CFrame.new(0, 2, 0)
+                                    wait(0.1)
+                                    e:InputHoldBegin()
+                                    e:InputHoldEnd()
+                                end
+                            end
+                        end       
+                    end
+                end
+            end
+        end
+        end)
+        
+        local autoairdrop123 = makeutilbutton("自动捡空投标记")
+        local autoairdrop123t = false
+        autoairdrop123.MouseButton1Click:Connect(function()
+            if autoairdrop123t == false then
+                autoairdrop123t = true
+                autoairdrop123.Text = "自动捡空投、空袭标记(开)"
+            else
+                autoairdrop123t = false
+                autoairdrop123.Text = "自动捡空投标记"
+            end
+            while autoairdrop123t == true do
+        	wait(0.1)
+            local epoh2 = game:GetService("Players")
+            local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
+            for i,l in pairs(game:GetService("Workspace").Game.Entities.ItemPickup:GetChildren()) do
+                for i,v in pairs(l:GetChildren()) do
+                    if v.ClassName == "MeshPart" or "Part" then
+                        for i,e in pairs(v:GetChildren()) do
+                            if e.ClassName == "ProximityPrompt" then
+                                if e.ObjectText == "Airdrop Marker" or e.ObjectText == "Airstrike Marker" then
+                                    local epoh1 = v.CFrame
+                                    epoh3.CFrame = epoh1 * CFrame.new(0, 2, 0)
+                                    wait(0.1)
+                                    e:InputHoldBegin()
+                                    e:InputHoldEnd()
+                                end
+                            end
+                        end       
+                    end
+                end
+            end
+        end
+        end)
+        
+ local autoairdrop123 = makeutilbutton("自动捡圣诞空投标记")
+        local autoairdrop123t = false
+        autoairdrop123.MouseButton1Click:Connect(function()
+            if autoairdrop123t == false then
+                autoairdrop123t = true
+                autoairdrop123.Text = "自动捡圣诞空投开"
+            else
+                autoairdrop123t = false
+                autoairdrop123.Text = "自动捡圣诞空投标记"
+            end
+            while autoairdrop123t == true do
+        	wait(0.1)
+            local epoh2 = game:GetService("Players")
+            local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
+            for i,l in pairs(game:GetService("Workspace").Game.Entities.ItemPickup:GetChildren()) do
+                for i,v in pairs(l:GetChildren()) do
+                    if v.ClassName == "MeshPart" or "Part" then
+                        for i,e in pairs(v:GetChildren()) do
+                            if e.ClassName == "ProximityPrompt" then
+                                if e.ObjectText == "Santa Signal" then
                                     local epoh1 = v.CFrame
                                     epoh3.CFrame = epoh1 * CFrame.new(0, 2, 0)
                                     wait(0.1)
@@ -1834,6 +1866,443 @@
         end
         end)
 
+ local autoairdrop123 = makeutilbutton("自动捡野马")
+        local autoairdrop123t = false
+        autoairdrop123.MouseButton1Click:Connect(function()
+            if autoairdrop123t == false then
+                autoairdrop123t = true
+                autoairdrop123.Text = "自动捡野马开"
+            else
+                autoairdrop123t = false
+                autoairdrop123.Text = "自动捡野马"
+            end
+            while autoairdrop123t == true do
+        	wait(0.1)
+            local epoh2 = game:GetService("Players")
+            local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
+            for i,l in pairs(game:GetService("Workspace").Game.Entities.ItemPickup:GetChildren()) do
+                for i,v in pairs(l:GetChildren()) do
+                    if v.ClassName == "MeshPart" or "Part" then
+                        for i,e in pairs(v:GetChildren()) do
+                            if e.ClassName == "ProximityPrompt" then
+                                if e.ObjectText == "Mustang Key" then
+                                    local epoh1 = v.CFrame
+                                    epoh3.CFrame = epoh1 * CFrame.new(0, 2, 0)
+                                    wait(0.1)
+                                    e:InputHoldBegin()
+                                    e:InputHoldEnd()
+                                end
+                            end
+                        end       
+                    end
+                end
+            end
+        end
+        end)
+ 
+ local autoairdrop123 = makeutilbutton("自动捡飞机钥匙")
+        local autoairdrop123t = false
+        autoairdrop123.MouseButton1Click:Connect(function()
+            if autoairdrop123t == false then
+                autoairdrop123t = true
+                autoairdrop123.Text = "自动捡飞机钥匙开"
+            else
+                autoairdrop123t = false
+                autoairdrop123.Text = "自动捡飞机钥匙"
+            end
+            while autoairdrop123t == true do
+        	wait(0.1)
+            local epoh2 = game:GetService("Players")
+            local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
+            for i,l in pairs(game:GetService("Workspace").Game.Entities.ItemPickup:GetChildren()) do
+                for i,v in pairs(l:GetChildren()) do
+                    if v.ClassName == "MeshPart" or "Part" then
+                        for i,e in pairs(v:GetChildren()) do
+                            if e.ClassName == "ProximityPrompt" then
+                                if e.ObjectText == "Helicopter Key" then
+                                    local epoh1 = v.CFrame
+                                    epoh3.CFrame = epoh1 * CFrame.new(0, 2, 0)
+                                    wait(0.1)
+                                    e:InputHoldBegin()
+                                    e:InputHoldEnd()
+                                end
+                            end
+                        end       
+                    end
+                end
+            end
+        end
+        end)
+
+        local autoairdrop1231 = makeutilbutton("自动捡精致零件")
+        local autoairdrop1231t = false
+        autoairdrop1231.MouseButton1Click:Connect(function()
+            if autoairdrop1231t == false then
+                autoairdrop1231t = true
+                autoairdrop1231.Text = "自动捡精致零件(开)"
+            else
+                autoairdrop1231t = false
+                autoairdrop1231.Text = "自动捡精致零件"
+            end
+            while autoairdrop1231t == true do
+        	wait(0.1)
+            local epoh2 = game:GetService("Players")
+            local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
+            for i,l in pairs(game:GetService("Workspace").Game.Entities.ItemPickup:GetChildren()) do
+                for i,v in pairs(l:GetChildren()) do
+                    if v.ClassName == "MeshPart" or "Part" then
+                        for i,e in pairs(v:GetChildren()) do
+                            if e.ClassName == "ProximityPrompt" then
+                                if e.ObjectText == "Electronics" or e.ObjectText == "Weapon Parts" then
+                                    local epoh1 = v.CFrame
+                                    epoh3.CFrame = epoh1 * CFrame.new(0, 2, 0)
+                                    wait(0.1)
+                                    e:InputHoldBegin()
+                                    e:InputHoldEnd()
+                                end
+                            end
+                        end       
+                    end
+                end
+            end
+        end
+        end)
+        
+        local autoPresent = makeutilbutton("自动捡紫礼物盒")
+        local autoPresentt = false
+        autoPresent.MouseButton1Click:Connect(function()
+            if autoPresentt == false then
+                autoPresentt = true
+                autoPresent.Text = "自动捡紫礼物盒(开)"
+            else
+                autoPresentt = false
+                autoPresent.Text = "自动捡紫礼物盒"
+            end
+            while autoPresentt == true do
+        	wait(0.00000001)
+            local epoh2 = game:GetService("Players")
+            local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
+            for i,l in pairs(game:GetService("Workspace").Game.Entities.ItemPickup:GetChildren()) do
+                for i,v in pairs(l:GetChildren()) do
+                    if v.ClassName == "MeshPart" or "Part" then
+                        for i,e in pairs(v:GetChildren()) do
+                            if e.ClassName == "ProximityPrompt" then
+                                if e.ObjectText == "Medium Present" then
+                                    local epoh1 = v.CFrame
+                                    epoh3.CFrame = epoh1 * CFrame.new(0, 2, 0)
+                                    wait(0.0000000001)
+                                    e:InputHoldBegin()
+                                    e:InputHoldEnd()
+                                end
+                            end
+                        end       
+                    end
+                end
+            end
+        end
+        end)
+        
+local autoPresent = makeutilbutton("自动捡大礼物盒")
+        local autoPresentt = false
+        autoPresent.MouseButton1Click:Connect(function()
+            if autoPresentt == false then
+                autoPresentt = true
+                autoPresent.Text = "自动捡大礼物盒(开)"
+            else
+                autoPresentt = false
+                autoPresent.Text = "自动捡大礼物盒"
+            end
+            while autoPresentt == true do
+        	wait(0.0001)
+            local epoh2 = game:GetService("Players")
+            local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
+            for i,l in pairs(game:GetService("Workspace").Game.Entities.ItemPickup:GetChildren()) do
+                for i,v in pairs(l:GetChildren()) do
+                    if v.ClassName == "MeshPart" or "Part" then
+                        for i,e in pairs(v:GetChildren()) do
+                            if e.ClassName == "ProximityPrompt" then
+                                if e.ObjectText == "Large Present" then
+                                    local epoh1 = v.CFrame
+                                    epoh3.CFrame = epoh1 * CFrame.new(0, 2, 0)
+                                    wait(0.0001)
+                                    e:InputHoldBegin()
+                                    e:InputHoldEnd()
+                                end
+                            end
+                        end       
+                    end
+                end
+            end
+        end
+        end)
+        
+        local autoredcrad = makeutilbutton("自动捡红卡")
+        local autoredcradt = false
+        autoredcrad.MouseButton1Click:Connect(function()
+            if autoredcradt == false then
+                autoredcradt = true
+                autoredcrad.Text = "自动捡红卡(开)"
+            else
+                autoredcradt = false
+                autoredcrad.Text = "自动捡红卡"
+            end
+            while autoredcradt == true do
+        	wait(0.1)
+            local epoh2 = game:GetService("Players")
+            local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
+            for i,l in pairs(game:GetService("Workspace").Game.Entities.ItemPickup:GetChildren()) do
+                for i,v in pairs(l:GetChildren()) do
+                    if v.ClassName == "MeshPart" or "Part" then
+                        for i,e in pairs(v:GetChildren()) do
+                            if e.ClassName == "ProximityPrompt" then
+                                if e.ObjectText == "Military Armory Keycard" then
+                                    local epoh1 = v.CFrame
+                                    epoh3.CFrame = epoh1 * CFrame.new(0, 2, 0)
+                                    wait(0.1)
+                                    e:InputHoldBegin()
+                                    e:InputHoldEnd()
+                                end
+                            end
+                        end       
+                    end
+                end
+            end
+        end
+        end)
+        
+  local autoredcrad = makeutilbutton("自动捡蓝卡")
+        local autoredcradt = false
+        autoredcrad.MouseButton1Click:Connect(function()
+            if autoredcradt == false then
+                autoredcradt = true
+                autoredcrad.Text = "自动捡蓝卡(开)"
+            else
+                autoredcradt = false
+                autoredcrad.Text = "自动捡蓝卡"
+            end
+            while autoredcradt == true do
+        	wait(0.1)
+            local epoh2 = game:GetService("Players")
+            local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
+            for i,l in pairs(game:GetService("Workspace").Game.Entities.ItemPickup:GetChildren()) do
+                for i,v in pairs(l:GetChildren()) do
+                    if v.ClassName == "MeshPart" or "Part" then
+                        for i,e in pairs(v:GetChildren()) do
+                            if e.ClassName == "ProximityPrompt" then
+                                if e.ObjectText == "Police Armory Keycard" then
+                                    local epoh1 = v.CFrame
+                                    epoh3.CFrame = epoh1 * CFrame.new(0, 2, 0)
+                                    wait(0.1)
+                                    e:InputHoldBegin()
+                                    e:InputHoldEnd()
+                                end
+                            end
+                        end       
+                    end
+                end
+            end
+        end
+        end)
+
+        local autopickballoon = makeutilbutton("自动捡气球")
+        local autopickballoont = false
+        autopickballoon.MouseButton1Click:Connect(function()
+            if autopickballoont == false then
+                autopickballoont = true
+                autopickballoon.Text = "自动捡气球(开)"
+            else
+                autopickballoont = false
+                autopickballoon.Text = "自动捡气球"
+            end
+            while autopickballoont == true do
+        	wait(0.00000001)
+            local epoh2 = game:GetService("Players")
+            local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
+            for i,l in pairs(game:GetService("Workspace").Game.Entities.ItemPickup:GetChildren()) do
+                for i,v in pairs(l:GetChildren()) do
+                    if v.ClassName == "MeshPart" or "Part" then
+                        for i,e in pairs(v:GetChildren()) do
+                            if e.ClassName == "ProximityPrompt" then
+                                if e.ObjectText == "Bunny Balloon" or e.ObjectText == "Ghost Balloon" or e.ObjectText == "Clover Balloon" or e.ObjectText == "Bat Balloon"  or e.ObjectText == "Heart Balloon" then
+                                    local epoh1 = v.CFrame
+                                    epoh3.CFrame = epoh1 * CFrame.new(0, 2, 0)
+                                    wait(0.0000001)
+                                    e:InputHoldBegin()
+                                    e:InputHoldEnd()
+                                end
+                            end
+                        end       
+                    end
+                end
+            end
+        end
+        end)
+        
+        local autopickcandycane = makeutilbutton("自动捡糖果棒")
+        local autopickcandycanet = false
+        autopickcandycane.MouseButton1Click:Connect(function()
+            if autopickcandycanet == false then
+                autopickcandycanet = true
+                autopickcandycane.Text = "自动捡糖果棒(开)"
+            else
+                autopickcandycanet = false
+                autopickcandycane.Text = "自动捡糖果棒"
+            end
+            while autopickcandycanet == true do
+        	wait(0.1)
+            local epoh2 = game:GetService("Players")
+            local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
+            for i,l in pairs(game:GetService("Workspace").Game.Entities.ItemPickup:GetChildren()) do
+                for i,v in pairs(l:GetChildren()) do
+                    if v.ClassName == "MeshPart" or "Part" then
+                        for i,e in pairs(v:GetChildren()) do
+                            if e.ClassName == "ProximityPrompt" then
+                                if e.ObjectText == "Candy Cane" or e.ObjectText == "Blue Candy Cane" then
+                                    local epoh1 = v.CFrame
+                                    epoh3.CFrame = epoh1 * CFrame.new(0, 2, 0)
+                                    wait(0.1)
+                                    e:InputHoldBegin()
+                                    e:InputHoldEnd()
+                                end
+                            end
+                        end       
+                    end
+                end
+            end
+        end
+        end)
+        
+        local aassdd = makeutilbutton("珠宝店提示")
+            local aassddt = false
+            aassdd.MouseButton1Click:Connect(function()
+            if aassddt == false then
+                aassddt = true
+                aassdd.Text = "珠宝店提示(开)"
+            else
+                automoneyprintt = false
+                aassdd.Text = "珠宝店提示"
+            end
+        
+            while aassddt do
+                wait(0.1)
+                local Ge = game:GetService("Workspace").GemRobbery:FindFirstChild("Rubble")
+                if Ge then
+                    game:GetService("StarterGui"):SetCore("SendNotification",{
+        	    	Title = "提示：";
+        	    	Text = "珠宝店已刷新";
+        	    	Duration = math.huge;
+                    Button1 = "好"
+                    })
+                    wait(30)
+                end
+            end
+        end)
+        
+        makeutilbutton("瞬移秒开金保险").MouseButton1Click:Connect(function()
+            local BankDoor = game:GetService("Workspace").BankRobbery.VaultDoor
+            local epoh2 = game:GetService("Players")
+            local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
+            if BankDoor.Door.Attachment.ProximityPrompt.Enabled == true then
+                BankDoor.Door.Attachment.ProximityPrompt.HoldDuration = 0
+                BankDoor.Door.Attachment.ProximityPrompt.MaxActivationDistance = 20
+                local epoh1 = CFrame.new(1071.955810546875, 9, -343.80816650390625)
+                epoh3.CFrame = epoh1
+                wait(0.3)
+                BankDoor.Door.Attachment.ProximityPrompt:InputHoldBegin()
+        		BankDoor.Door.Attachment.ProximityPrompt:InputHoldEnd()
+            end
+            local GoldJewelSafes = game:GetService("Workspace").Game.Entities.GoldJewelSafe
+            for _, model in pairs(GoldJewelSafes:GetChildren()) do
+                if model.ClassName == "Model" then
+                    epoh3.CFrame = model.WorldPivot * CFrame.new(0, 10, 0)
+                    model.Door["Meshes/LargeSafe_Cube.002_Cube.003_None (1)"].Attachment.ProximityPrompt.HoldDuration = 0
+                    model.Door["Meshes/LargeSafe_Cube.002_Cube.003_None (1)"].Attachment.ProximityPrompt.MaxActivationDistance = 20
+                    wait(0.3)
+                    if model.Door["Meshes/LargeSafe_Cube.002_Cube.003_None (1)"].Attachment.ProximityPrompt.Enabled == true then
+                        model.Door["Meshes/LargeSafe_Cube.002_Cube.003_None (1)"].Attachment.ProximityPrompt:InputHoldBegin()
+                        model.Door["Meshes/LargeSafe_Cube.002_Cube.003_None (1)"].Attachment.ProximityPrompt:InputHoldEnd()
+                        break
+                    end
+                end
+            end
+        end)
+        makeutilbutton("瞬移开黑保险").MouseButton1Click:Connect(function()
+            local BankDoor = game:GetService("Workspace").BankRobbery.VaultDoor
+            local epoh2 = game:GetService("Players")
+            local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
+            if BankDoor.Door.Attachment.ProximityPrompt.Enabled == true then
+                BankDoor.Door.Attachment.ProximityPrompt.HoldDuration = 0
+                BankDoor.Door.Attachment.ProximityPrompt.MaxActivationDistance = 20
+                local epoh1 = CFrame.new(1071.955810546875, 9, -343.80816650390625)
+                epoh3.CFrame = epoh1
+                wait(0.3)
+                BankDoor.Door.Attachment.ProximityPrompt:InputHoldBegin()
+        		BankDoor.Door.Attachment.ProximityPrompt:InputHoldEnd()
+            end
+            local JewelSafes = game:GetService("Workspace").Game.Entities.JewelSafe
+            for _, model in pairs(JewelSafes:GetChildren()) do
+                if model.ClassName == "Model" then
+                    epoh3.CFrame = model.WorldPivot * CFrame.new(0, 10, 0)
+                    model.Door["Meshes/LargeSafe_Cube.002_Cube.003_None (1)"].Attachment.ProximityPrompt.HoldDuration = 0
+                    model.Door["Meshes/LargeSafe_Cube.002_Cube.003_None (1)"].Attachment.ProximityPrompt.MaxActivationDistance = 20
+                    wait(0.3)
+                    if model.Door["Meshes/LargeSafe_Cube.002_Cube.003_None (1)"].Attachment.ProximityPrompt.Enabled == true then
+                        model.Door["Meshes/LargeSafe_Cube.002_Cube.003_None (1)"].Attachment.ProximityPrompt:InputHoldBegin()
+                        model.Door["Meshes/LargeSafe_Cube.002_Cube.003_None (1)"].Attachment.ProximityPrompt:InputHoldEnd()
+                        break
+                    end
+                end
+            end
+        end)
+        makeutilbutton("瞬移大宝箱").MouseButton1Click:Connect(function()
+            local LargeChes = game:GetService("Workspace").Game.Entities.LargeChest
+            local foundModel = false
+            for _, model in pairs(LargeChes:GetChildren()) do
+                if model.ClassName == "Model" then
+                    foundModel = true
+                    local epoh1 = model.WorldPivot
+                    local epoh2 = game:GetService("Players")
+                    local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
+                    epoh3.CFrame = epoh1 * CFrame.new(0, 2, 0)
+                    wait(0.1)
+                    model.Door["Meshes/LargeSafe1_Cube.002_Cube.003_None (3)"].Attachment.ProximityPrompt:InputHoldBegin()
+                    model.Door["Meshes/LargeSafe1_Cube.002_Cube.003_None (3)"].Attachment.ProximityPrompt:InputHoldEnd()
+                    break
+                end
+            end
+        end)
+        makeutilbutton("瞬移开小宝箱").MouseButton1Click:Connect(function()
+            local SmallChes = game:GetService("Workspace").Game.Entities.SmallChest
+            for _, model in pairs(SmallChes:GetChildren()) do
+                if model.ClassName == "Model" then
+                    local epoh1 = model.WorldPivot
+                    local epoh2 = game:GetService("Players")
+                    local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
+                    epoh3.CFrame = epoh1 * CFrame.new(0, 2, 0)
+                    wait(0.1)
+                    model.Lock["Meshes/untitled_chest.002_Material.009 (4)"].Attachment.ProximityPrompt:InputHoldBegin()
+                    model.Lock["Meshes/untitled_chest.002_Material.009 (4)"].Attachment.ProximityPrompt:InputHoldEnd()
+                    break
+                end
+            end
+        end)
+        makeutilbutton("瞬移开小保险").MouseButton1Click:Connect(function()
+            local SmallSaf = game:GetService("Workspace").Game.Entities.SmallSafe
+            for _, model in pairs(SmallSaf:GetChildren()) do
+                if model.ClassName == "Model" then
+                    local epoh1 = model.WorldPivot
+                    local epoh2 = game:GetService("Players")
+                    local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
+                    epoh3.CFrame = epoh1 * CFrame.new(0, 2, 0)
+                    SmallSaf.SmallSafe.Door["Meshes/Safe1_Cube.002_Cube.003_None (1)"].Attachment.ProximityPrompt.HoldDuration = 0
+                    wait(0.1)
+                    SmallSaf.SmallSafe.Door["Meshes/Safe1_Cube.002_Cube.003_None (1)"].Attachment.ProximityPrompt:InputHoldBegin()
+                    SmallSaf.SmallSafe.Door["Meshes/Safe1_Cube.002_Cube.003_None (1)"].Attachment.ProximityPrompt:InputHoldEnd()
+                    break
+                end
+            end
+        end)
+        
         makeutilbutton("瞬移挖宝藏").MouseButton1Click:Connect(function()
             local Debri = game:GetService("Workspace").Game.Local.Debris
             if Debri.TreasureMarker then
