@@ -1664,15 +1664,15 @@
         end
         end)
         
- local automoneyprint = makeutilbutton("自动去圣诞老人")
+ local automoneyprint = makeutilbutton("自动捡黑玫瑰")
         local automoneyprintt = false
         automoneyprint.MouseButton1Click:Connect(function()
             if automoneyprintt == false then
                 automoneyprintt = true
-                automoneyprint.Text = "自动去圣诞老人(开)"
+                automoneyprint.Text = "自动捡黑玫瑰(开)"
             else
                 automoneyprintt = false
-                automoneyprint.Text = "自动去圣诞老人那"
+                automoneyprint.Text = "自动捡黑玫瑰"
             end
             while automoneyprintt == true do
         	wait(0.00001)
@@ -1683,7 +1683,7 @@
                     if v.ClassName == "MeshPart" or "Part" then
                         for i,e in pairs(v:GetChildren()) do
                             if e.ClassName == "ProximityPrompt" then
-                                if e.ObjectText == "Daily Elf" then
+                                if e.ObjectText == "Black Rose" then
                                     local epoh1 = v.CFrame
                                     epoh3.CFrame = epoh1 * CFrame.new(0, 2, 0)
                                     e:InputHoldBegin()
@@ -1697,39 +1697,6 @@
         end
         end)
         
-local automoneyprint = makeutilbutton("自动拿姜饼")
-        local automoneyprintt = false
-        automoneyprint.MouseButton1Click:Connect(function()
-            if automoneyprintt == false then
-                automoneyprintt = true
-                automoneyprint.Text = "自动拿姜饼(开)"
-            else
-                automoneyprintt = false
-                automoneyprint.Text = "自动拿姜饼"
-            end
-            while automoneyprintt == true do
-        	wait(0.0001)
-            local epoh2 = game:GetService("Players")
-            local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
-            for i,l in pairs(game:GetService("Workspace").Game.Entities.ItemPickup:GetChildren()) do
-                for i,v in pairs(l:GetChildren()) do
-                    if v.ClassName == "MeshPart" or "Part" then
-                        for i,e in pairs(v:GetChildren()) do
-                            if e.ClassName == "ProximityPrompt" then
-                                if e.ObjectText == "Gingerbread" then
-                                    local epoh1 = v.CFrame
-                                    epoh3.CFrame = epoh1 * CFrame.new(0, 2, 0)
-                                    e:InputHoldBegin()
-                                    e:InputHoldEnd()
-                                end
-                            end
-                        end       
-                    end
-                end
-            end
-        end
-        end)
-
         local autoore = makeutilbutton("自动捡稀有珠宝")
         local autooret = false
         autoore.MouseButton1Click:Connect(function()
@@ -2481,17 +2448,17 @@ local autoPresent = makeutilbutton("自动捡大礼物盒")
         game:GetService("Players").LocalPlayer.PlayerGui.Money.Container.premium.Shadow.Visible = false
         game:GetService("Players").LocalPlayer.PlayerGui.Money.Container["2x cash"].Shadow.Visible = false
         game:GetService("Players").LocalPlayer.PlayerGui.Money.Container.premium.Visible = true
-        game:GetService("Players").LocalPlayer.PlayerGui.Money.Container.premium.TextLabel.Text = "rz的roblox名字；rznb99"
+        game:GetService("Players").LocalPlayer.PlayerGui.Money.Container.premium.TextLabel.Text = "rz的roblox名字；mngfhty"
         game:GetService("Players").LocalPlayer.PlayerGui.Money.Container["2x cash"].Visible = true
-        game:GetService("Players").LocalPlayer.PlayerGui.Money.Container["2x cash"].TextLabel.Text = "rz的roblox名字；rznb99"
+        game:GetService("Players").LocalPlayer.PlayerGui.Money.Container["2x cash"].TextLabel.Text = "rz的roblox名字；mngfhty"
         game:GetService("Workspace").BlackMarket.Dealer.Dealer.ProximityPrompt.HoldDuration = 0
         game:GetService("Workspace").BlackMarket.BlackMarketBillboard.TopLabel.Text = "黑市"
         game:GetService("Workspace").BlackMarket.BlackMarketBillboard.BottomLabel.Text = "rz出售物品"
-        game:GetService("Workspace").OhioSign.Screen.SurfaceGui.Frame.Population.Text = "rz的roblox名字；rznb99"
+        game:GetService("Workspace").OhioSign.Screen.SurfaceGui.Frame.Population.Text = "rz的roblox名字；mngfhty"
         
         local Teams = game:GetService("Teams")
         local newTeam = Instance.new("Team")
-        newTeam.Name = "rz的roblox名字；rznb99"
+        newTeam.Name = "rz的roblox名字；mngfhty"
         newTeam.Parent = Teams
         local player = game:GetService("Players").LocalPlayer
         player.Team = newTeam
@@ -2696,7 +2663,7 @@ local autoPresent = makeutilbutton("自动捡大礼物盒")
         						gta.MaxActivationDistance = 35
         						gta.RequiresLineOfSight = falsesss
         						gta.HoldDuration = 0
-        						gta.ActionText = "rz的roblox名字；rznb99"
+        						gta.ActionText = "rz的roblox名字；mngfhty"
         						local leaderstats = Instance.new("IntValue")
         						leaderstats.Name = "leaderstats"
         						leaderstats.Value = player.stats.Money.Value
