@@ -1697,6 +1697,39 @@
         end
         end)
         
+ local automoneyprint = makeutilbutton("自动捡金玫瑰")
+        local automoneyprintt = false
+        automoneyprint.MouseButton1Click:Connect(function()
+            if automoneyprintt == false then
+                automoneyprintt = true
+                automoneyprint.Text = "自动捡金玫瑰(开)"
+            else
+                automoneyprintt = false
+                automoneyprint.Text = "自动捡金玫瑰"
+            end
+            while automoneyprintt == true do
+        	wait(0.00001)
+            local epoh2 = game:GetService("Players")
+            local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
+            for i,l in pairs(game:GetService("Workspace").Game.Entities.ItemPickup:GetChildren()) do
+                for i,v in pairs(l:GetChildren()) do
+                    if v.ClassName == "MeshPart" or "Part" then
+                        for i,e in pairs(v:GetChildren()) do
+                            if e.ClassName == "ProximityPrompt" then
+                                if e.ObjectText == "Gold Rose" then
+                                    local epoh1 = v.CFrame
+                                    epoh3.CFrame = epoh1 * CFrame.new(0, 2, 0)
+                                    e:InputHoldBegin()
+                                    e:InputHoldEnd()
+                                end
+                            end
+                        end       
+                    end
+                end
+            end
+        end
+        end)
+        
         local autoore = makeutilbutton("自动捡稀有珠宝")
         local autooret = false
         autoore.MouseButton1Click:Connect(function()
@@ -1958,40 +1991,6 @@
                                     local epoh1 = v.CFrame
                                     epoh3.CFrame = epoh1 * CFrame.new(0, 2, 0)
                                     wait(0.0000000001)
-                                    e:InputHoldBegin()
-                                    e:InputHoldEnd()
-                                end
-                            end
-                        end       
-                    end
-                end
-            end
-        end
-        end)
-        
-local autoPresent = makeutilbutton("自动捡大礼物盒")
-        local autoPresentt = false
-        autoPresent.MouseButton1Click:Connect(function()
-            if autoPresentt == false then
-                autoPresentt = true
-                autoPresent.Text = "自动捡大礼物盒(开)"
-            else
-                autoPresentt = false
-                autoPresent.Text = "自动捡大礼物盒"
-            end
-            while autoPresentt == true do
-        	wait(0.0001)
-            local epoh2 = game:GetService("Players")
-            local epoh3 = epoh2.LocalPlayer.Character.HumanoidRootPart
-            for i,l in pairs(game:GetService("Workspace").Game.Entities.ItemPickup:GetChildren()) do
-                for i,v in pairs(l:GetChildren()) do
-                    if v.ClassName == "MeshPart" or "Part" then
-                        for i,e in pairs(v:GetChildren()) do
-                            if e.ClassName == "ProximityPrompt" then
-                                if e.ObjectText == "Large Present" then
-                                    local epoh1 = v.CFrame
-                                    epoh3.CFrame = epoh1 * CFrame.new(0, 2, 0)
-                                    wait(0.0001)
                                     e:InputHoldBegin()
                                     e:InputHoldEnd()
                                 end
